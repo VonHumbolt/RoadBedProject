@@ -13,7 +13,6 @@ function Header() {
             <img
               src="./road_icon.png"
               className="object-cover h-10 w-10"
-              fill
             />
             <h3 className="text-lg font-bold text-teal-500 hidden md:inline-block">
               Road Bed
@@ -21,10 +20,15 @@ function Header() {
           </div>
         </Link>
 
-        <input
-          className="border border-gray-300 rounded-lg px-2"
-          placeholder="Search"
-        />
+        <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm">
+          <input
+            className="flex-grow outline-none bg-transparent pl-5 text-sm text-gray-600
+              placeholder-gray-400"
+            placeholder="Search"
+          />
+          <SearchIcon className="hidden md:inline-flex md:mx-2 h-8 bg-teal-400 p-2 rounded-full
+            cursor-pointer" />
+        </div>
 
         <div className="flex items-center space-x-4">
           <Link href="/login">
@@ -33,7 +37,7 @@ function Header() {
             </p>
           </Link>
           <div
-            className="flex items-center space-x-2 border border-gray-400 rounded-full px-2
+            className="flex items-center space-x-2 border-2 border-gray-200 rounded-full px-2
                     cursor-pointer hover:shadow-lg hover:scale-105 transition duration-200 ease-in-out"
           >
             <MenuIcon className="h-7 w-7" />

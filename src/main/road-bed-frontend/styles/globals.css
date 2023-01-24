@@ -1,3 +1,10 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .formInput {
+        @apply bg-gray-200 rounded-md outline-none px-5 py-2 border-b-2 hover:border-teal-400 placeholder:text-gray-400 
+        focus:border-2 focus:border-teal-400 
+    }
+}

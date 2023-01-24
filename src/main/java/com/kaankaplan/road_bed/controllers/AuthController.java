@@ -6,7 +6,6 @@ import com.kaankaplan.road_bed.dtos.LoginRequest;
 import com.kaankaplan.road_bed.dtos.LoginResponse;
 import com.kaankaplan.road_bed.dtos.RefreshRequest;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
-import com.kaankaplan.road_bed.entities.RefreshToken;
 import com.kaankaplan.road_bed.entities.Tenant;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -14,6 +13,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth/")
+@CrossOrigin
 public class AuthController {
 
     private final AuthService authService;
