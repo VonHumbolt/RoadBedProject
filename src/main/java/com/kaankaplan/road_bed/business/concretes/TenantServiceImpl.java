@@ -11,6 +11,7 @@ import com.kaankaplan.road_bed.repositories.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class TenantServiceImpl implements TenantService {
@@ -29,6 +30,7 @@ public class TenantServiceImpl implements TenantService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Transactional
     @Override
     public Tenant saveTenant(TenantRegisterRequest tenantRegisterRequest) {
 

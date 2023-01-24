@@ -23,3 +23,9 @@ services:
       - ME_CONFIG_MONGODB_SERVER=mongodb
     depends_on:
       - mongodb
+
+  redis:
+    container_name: redis
+    image: redis
+    ports:
+      - "6379:6379"

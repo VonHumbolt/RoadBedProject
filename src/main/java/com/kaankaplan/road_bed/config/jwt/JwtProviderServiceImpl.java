@@ -32,7 +32,16 @@ public class JwtProviderServiceImpl implements JwtProviderService {
     }
 
     @Override
-    public String generateAccessTokenWithEmail(String email, Collection<GrantedAuthority> authorities) {
+    public String generateTokenWithEmail(String email, Collection<GrantedAuthority> authorities) {
         return null;
+    }
+
+    @Override
+    public String generateRefreshToken(String email) {
+        return Jwts.builder()
+                .setIssuer(email)
+                .setIssuedAt(new Date())
+                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                .compact();
     }
 }

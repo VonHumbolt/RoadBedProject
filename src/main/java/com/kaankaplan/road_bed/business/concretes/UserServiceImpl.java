@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -32,6 +33,12 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User addUser(User user) {
         return userRepository.insert(user);
+    }
+
+
+    @Override
+    public User findUserByEmail(String email) {
+        return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
     }
 
     @Override

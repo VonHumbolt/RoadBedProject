@@ -9,6 +9,7 @@ public interface JwtProviderService {
 
     String generateToken(User userPrincipal);
 
-    String generateAccessTokenWithEmail(String email, Collection<GrantedAuthority> authorities);
+    String generateTokenWithEmail(String email, Collection<GrantedAuthority> authorities);
 
+    String generateRefreshToken(String email);
 }

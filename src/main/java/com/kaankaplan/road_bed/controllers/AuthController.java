@@ -4,13 +4,13 @@ import com.kaankaplan.road_bed.business.abstracts.AuthService;
 import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.dtos.LoginRequest;
 import com.kaankaplan.road_bed.dtos.LoginResponse;
+import com.kaankaplan.road_bed.dtos.RefreshRequest;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
+import com.kaankaplan.road_bed.entities.RefreshToken;
 import com.kaankaplan.road_bed.entities.Tenant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("auth/")
@@ -33,5 +33,21 @@ public class AuthController {
     @PostMapping("login")
     public LoginResponse login(@RequestBody LoginRequest loginRequest) {
         return authService.login(loginRequest);
+    }
+
+    @PostMapping("logout")
+    public void logout(@RequestBody RefreshRequest refreshRequest) {
+        authService.logout(refreshRequest);
+    }
+
+    @PostMapping("refreshToken")
+    public LoginResponse refreshToken(@RequestBody RefreshRequest refreshRequest) {
+        return authService.refreshToken(refreshRequest);
+    }
+
+    @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
+    @GetMapping("getget")
+    public String get() {
+        return "Getting";
     }
 }
