@@ -36,11 +36,12 @@ public class AuthController {
     }
 
     @PostMapping("logout")
-    public void logout(@RequestBody RefreshRequest refreshRequest) {
+    public String logout(@RequestBody RefreshRequest refreshRequest) {
         authService.logout(refreshRequest);
+        return "LoggedOut";
     }
 
-    @PostMapping("refreshToken")
+    @PostMapping("refresh/accessToken")
     public LoginResponse refreshToken(@RequestBody RefreshRequest refreshRequest) {
         return authService.refreshToken(refreshRequest);
     }

@@ -65,9 +65,9 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public void logout(RefreshRequest refreshRequest) {
 
-        RefreshToken refreshTokenByToken = refreshTokenService.getRefreshTokenByToken(refreshRequest.refreshToken());
+        RefreshToken refreshTokenFromRedis = refreshTokenService.getRefreshTokenByToken(refreshRequest.refreshToken());
 
-        if (refreshTokenByToken == null)
+        if (refreshTokenFromRedis == null)
             throw new RuntimeException("Refresh Token is not found");
 
         refreshTokenService.deleteRefreshToken(refreshRequest.refreshToken());

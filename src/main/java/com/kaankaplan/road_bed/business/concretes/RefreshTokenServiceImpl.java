@@ -50,9 +50,9 @@ public class RefreshTokenServiceImpl implements RefreshTokenService {
     public void deleteRefreshToken(String refreshToken) {
         boolean present = refreshTokenRepository.getRefreshTokenByToken(refreshToken).isPresent();
 
-        if (present)
-            refreshTokenRepository.deleteRefreshToken(refreshToken);
+        if (!present)
+            throw new RuntimeException("Refresh Token not found");
 
-        throw new RuntimeException("Refresh Token not found");
+        refreshTokenRepository.deleteRefreshToken(refreshToken);
     }
 }

@@ -33,7 +33,13 @@ public class JwtProviderServiceImpl implements JwtProviderService {
 
     @Override
     public String generateTokenWithEmail(String email, Collection<GrantedAuthority> authorities) {
-        return null;
+        return Jwts.builder()
+                .setIssuer(email)
+                .setIssuedAt(new Date())
+                .setExpiration(new Date(new Date().getTime() + tokenExpirationTime))
+                .claim("authority", authorities)
+                .signWith(Keys.hmacShaKeyFor(key.getBytes()))
+                .compact();
     }
 
     @Override
