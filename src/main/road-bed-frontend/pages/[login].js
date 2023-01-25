@@ -1,5 +1,6 @@
 import Header from "@/components/Header";
 import AuthService from "@/services/authService";
+import Link from "next/link";
 import React, { useState } from "react";
 
 function Login() {
@@ -29,7 +30,7 @@ function Login() {
             Login
           </h3>
 
-          <form className="p-2 w-[400px] md:w-[500px] space-y-4 mx-auto">
+          <form className="p-2 w-fit sm:w-[400px] md:w-[500px] space-y-4 mx-auto">
             <div className="flex flex-col space-y-3">
               <input
                 className="formInput"
@@ -46,10 +47,19 @@ function Login() {
                 placeholder="Password"
               />
             </div>
+            <p>
+              You don't have an account?  {" "}
+              <Link href="/register">
+                <span className="font-semibold underline decoration-teal-600 cursor-pointer">
+                  Sign up now!
+                </span>
 
+              </Link>
+            </p>
             <button
-              className="px-10 md:px-20 rounded-md text-md font-semibold py-2 bg-teal-400"
+              className="formButton"
               onClick={(e) => login(e)}
+              type="submit"
             >
               Login
             </button>
