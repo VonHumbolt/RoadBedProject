@@ -1,8 +1,8 @@
 package com.kaankaplan.road_bed.entities;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 @Document(collection = "locations")
 public class Location {
@@ -10,9 +10,9 @@ public class Location {
     @Id
     private String locationId;
 
+    @Field
     public City city;
 
-    @Indexed(unique = true)
     public String address;
 
     public Location(City city, String address) {

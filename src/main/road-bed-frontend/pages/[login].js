@@ -1,23 +1,17 @@
 import Header from "@/components/Header";
 import AuthService from "@/services/authService";
 import Link from "next/link";
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 function Login() {
   const authService = new AuthService();
 
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const login = (e) => {
-    e.preventDefault();
-
-    let loginRequest = {
-      email: email,
-      password: password,
-    };
-
-    authService.login(loginRequest).then(result => console.log(result.data))
+  const { register, handleSubmit } = useForm();
+  const onSubmit = (data) => {
+    authService.login(data).then((result) => {
+      console.log(result.data);
+    });
   };
 
   return (
@@ -30,35 +24,34 @@ function Login() {
             Login
           </h3>
 
-          <form className="p-2 w-fit sm:w-[400px] md:w-[500px] space-y-4 mx-auto">
+          <form
+            className="p-2 w-fit sm:w-[400px] md:w-[500px] space-y-4 mx-auto"
+            onSubmit={handleSubmit(onSubmit)}
+          >
             <div className="flex flex-col space-y-3">
               <input
+                {...register("email")}
                 className="formInput"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
                 type="email"
                 placeholder="Email"
               />
               <input
+                {...register("password")}
                 className="formInput"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
                 type="password"
                 placeholder="Password"
               />
             </div>
             <p>
-              You don't have an account?  {" "}
+              You don't have an account?{" "}
               <Link href="/register">
                 <span className="font-semibold underline decoration-teal-600 cursor-pointer">
                   Sign up now!
                 </span>
-
               </Link>
             </p>
             <button
               className="formButton"
-              onClick={(e) => login(e)}
               type="submit"
             >
               Login

@@ -20,7 +20,7 @@ public class RoleController {
         this.roleService = roleService;
     }
 
-    @PreAuthorize("hasAnyRole('AUTHORITY_ADMIN')")
+//    @PreAuthorize("hasAnyRole('AUTHORITY_ADMIN')")
     @PostMapping("add")
     public Role addRole(@RequestBody Role role) {
         return roleService.addRole(role);

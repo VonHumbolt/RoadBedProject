@@ -1,9 +1,7 @@
-import Head from 'next/head'
-import Image from 'next/image'
-import { Inter } from '@next/font/google'
-import Header from '@/components/Header'
-
-const inter = Inter({ subsets: ['latin'] })
+import Head from "next/head";
+import Image from "next/image";
+import Header from "@/components/Header";
+import Houses from "@/components/Houses";
 
 export default function Home() {
   return (
@@ -14,9 +12,26 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/road_icon.png" />
       </Head>
-      
+
       <Header />
 
+      <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px]
+      2xl:h-[700px]">
+        <Image
+          className="object-cover"
+          src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80"
+          fill
+        />
+
+        <div className="absolute top-2/3 w-full text-center">
+          <button className="text-md font-bold bg-red-400 px-8 py-4
+           rounded-full cursor-pointer transition duration-200 ease-in-out 
+           hover:scale-105 hover:shadow-xl active:scale-90
+          text-white">Discover the World</button>
+        </div>
+      </div>
+
+      <Houses />
     </>
-  )
+  );
 }

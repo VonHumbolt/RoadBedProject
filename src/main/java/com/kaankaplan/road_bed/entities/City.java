@@ -10,7 +10,6 @@ public class City {
     @Id
     private String cityId;
 
-    @Indexed(unique = true)
     public String cityName;
 
     public City(String cityName) {
