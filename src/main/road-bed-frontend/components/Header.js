@@ -1,19 +1,23 @@
-import React from "react";
+import React, { useState } from "react";
 import { SearchIcon, MenuIcon } from "@heroicons/react/outline";
 import { UserCircleIcon } from "@heroicons/react/solid";
-import Image from "next/image";
 import Link from "next/link";
+import HeaderMenu from "./HeaderMenu";
+import { userFromRedux } from "@/redux/userSlice";
+import { useSelector } from "react-redux";
 
 function Header() {
+
+  const user = useSelector(userFromRedux);
+
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+
   return (
-    <header className="shadow-lg p-5 sticky top-0">
+    <header className="shadow-lg p-5 sticky top-0 bg-white z-20">
       <div className="max-w-7xl mx-auto flex flex-row justify-between items-center">
         <Link href="/">
           <div className="flex items-center space-x-2 cursor-pointer">
-            <img
-              src="./road_icon.png"
-              className="object-cover h-10 w-10"
-            />
+            <img src="./road_icon.png" className="object-cover h-10 w-10" />
             <h3 className="text-lg font-bold text-teal-500 hidden md:inline-block">
               Road Bed
             </h3>
@@ -26,8 +30,10 @@ function Header() {
               placeholder-gray-400"
             placeholder="Search"
           />
-          <SearchIcon className="hidden md:inline-flex md:mx-2 h-8 bg-teal-400 p-2 rounded-full
-            cursor-pointer" />
+          <SearchIcon
+            className="hidden md:inline-flex md:mx-2 h-8 bg-teal-400 p-2 rounded-full
+            cursor-pointer"
+          />
         </div>
 
         <div className="flex items-center space-x-4">
@@ -36,12 +42,19 @@ function Header() {
               Become a Host
             </p>
           </Link>
-          <div
-            className="flex items-center space-x-2 border-2 border-gray-200 rounded-full px-2
+          <div className="relative">
+            <div
+              className="flex items-center space-x-2 border-2 border-gray-200 rounded-full px-2
                     cursor-pointer hover:shadow-lg hover:scale-105 transition duration-200 ease-in-out"
-          >
-            <MenuIcon className="h-7 w-7" />
-            <UserCircleIcon className="h-10 w-10" color="teal" />
+              onClick={() => setIsMenuOpen(!isMenuOpen)}
+            >
+              <MenuIcon className="h-7 w-7" />
+              <UserCircleIcon className="h-10 w-10" color="teal" />
+            </div>
+
+            {isMenuOpen ? (
+              <HeaderMenu isLoggedIn={user.accessToken === undefined} />
+            ) : null}
           </div>
         </div>
       </div>

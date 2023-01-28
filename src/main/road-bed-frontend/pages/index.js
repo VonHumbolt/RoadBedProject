@@ -21,6 +21,7 @@ export default function Home() {
           className="object-cover"
           src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80"
           fill
+          alt=""
         />
 
         <div className="absolute top-2/3 w-full text-center">

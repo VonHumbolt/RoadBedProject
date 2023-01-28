@@ -4,7 +4,9 @@ const nextConfig = {
   images:{
     domains:[
       "pbs.twimg.com",
-      "images.unsplash.com"
+      "images.unsplash.com",
+      "www.bizevdeyokuz.com",
+      "izmir.ktb.gov.tr"
     ]
   }
 }

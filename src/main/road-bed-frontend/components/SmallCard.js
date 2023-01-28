@@ -8,15 +8,14 @@ function SmallCard({ img, name }) {
         group cursor-pointer"
     >
       <div className="relative h-36 w-64">
-        <Image className="rounded-xl" src={img} fill />
+        <Image className="rounded-xl" src={img} fill alt=""/>
         <div
-          className="absolute h-36 w-64
+          className="absolute h-36 w-64 flex items-center justify-center
             rounded-xl group-hover:bg-teal-300 group-hover:opacity-90 
             transiton duration-100 ease-out"
         >
-          <h2 className="absolute top-1/3 left-1/3
-           hidden group-hover:inline text-xl font-bold ">
-            {" "}
+          <h2 className="hidden group-hover:inline text-xl font-bold ">
+            {""}
             {name}{" "}
           </h2>
         </div>

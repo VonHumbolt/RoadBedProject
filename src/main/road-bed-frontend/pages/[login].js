@@ -1,16 +1,19 @@
 import Header from "@/components/Header";
+import { save } from "@/redux/userSlice";
 import AuthService from "@/services/authService";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 
 function Login() {
   const authService = new AuthService();
+  const dispatch = useDispatch();
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => {
     authService.login(data).then((result) => {
-      console.log(result.data);
+      dispatch(save(result.data))
     });
   };
 
