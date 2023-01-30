@@ -6,7 +6,8 @@ const nextConfig = {
       "pbs.twimg.com",
       "images.unsplash.com",
       "www.bizevdeyokuz.com",
-      "izmir.ktb.gov.tr"
+      "izmir.ktb.gov.tr",
+      "img.freepik.com"
     ]
   }
 }

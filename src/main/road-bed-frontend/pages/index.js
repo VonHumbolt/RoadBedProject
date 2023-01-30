@@ -1,7 +1,9 @@
 import Head from "next/head";
 import Image from "next/image";
 import Header from "@/components/Header";
-import Houses from "@/components/Houses";
+import Cities from "@/components/Cities";
+import HostRegisterCard from "@/components/HostRegisterCard";
+import Categories from "@/components/Categories";
 
 export default function Home() {
   return (
@@ -25,14 +27,23 @@ export default function Home() {
         />
 
         <div className="absolute top-2/3 w-full text-center">
-          <button className="text-md font-bold bg-red-400 px-8 py-4
+          <button className="text-md font-bold bg-[#ed6172] px-8 py-4
            rounded-full cursor-pointer transition duration-200 ease-in-out 
            hover:scale-105 hover:shadow-xl active:scale-90
           text-white">Discover the World</button>
         </div>
       </div>
 
-      <Houses />
+      <section>
+        
+        <Categories />
+
+      </section>
+
+      <Cities />
+
+      <HostRegisterCard />
+
     </>
   );
 }

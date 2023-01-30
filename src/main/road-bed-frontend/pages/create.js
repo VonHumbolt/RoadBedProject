@@ -13,34 +13,36 @@ const getCities = async () => {
 };
 
 function Create() {
-
   const user = useSelector(userFromRedux);
 
   const [selectedImages, setSelectedImages] = useState([]);
   const [cities, setCities] = useState([]);
-  const [selectedCity, setSelectedCity] = useState()
+  const [selectedCity, setSelectedCity] = useState();
 
   const fileRef = useRef(null);
-console.log(user.accessToken)
+
   const houseService = new HouseService();
 
   useEffect(() => {
     getCities().then((res) => setCities(res));
   }, []);
 
-  const { register, handleSubmit } = useForm();
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
   const onSubmit = (data) => {
-    
     let location = {
       address: data.address,
-      city: selectedCity
-    }
+      city: selectedCity,
+    };
     let house = {
       capacity: data.capacity,
       price: data.price,
-      location: location
-    }
-    houseService.save(house, user?.accessToken).then(result => console.log(result))
+      location: location,
+    };
+    houseService.save(house, user?.accessToken);
   };
 
   const selectImageUrl = (e) => {
@@ -56,26 +58,33 @@ console.log(user.accessToken)
   };
 
   const handleSelectCity = (cityId) => {
-    let selectedCity = cities.filter(city => city.cityId == cityId)[0];
-    setSelectedCity(selectedCity)
-  }
+    let selectedCity = cities.filter((city) => city.cityId == cityId)[0];
+    setSelectedCity(selectedCity);
+  };
 
   return (
     <div className="relative">
       <Header />
       <div className="max-w-7xl mx-auto">
         <h2 className="text-center text-4xl font-bold mt-20">Save House</h2>
-        <form className="flex flex-col mx-auto gap-2 w-fit mt-10 space-y-3"
-        onSubmit={handleSubmit(onSubmit)}>
+        <form
+          className="flex flex-col mx-auto gap-2 w-fit mt-10 space-y-3"
+          onSubmit={handleSubmit(onSubmit)}
+        >
           <div className="flex flex-col space-y-2">
             <label className="px-1 text-gray-500">
               In which city is your house located?
             </label>
-            <select className="formInput px-2" onChange={(e) => {
+            <select
+              className="formInput px-2"
+              onChange={(e) => {
                 handleSelectCity(e.target.value);
-            }}>
+              }}
+            >
               {cities?.map((city) => (
-                <option key={city.cityId} value={city.cityId}>{city.cityName}</option>
+                <option key={city.cityId} value={city.cityId}>
+                  {city.cityName}
+                </option>
               ))}
             </select>
           </div>
@@ -84,33 +93,44 @@ console.log(user.accessToken)
               How much income do you want to earn?
             </label>
             <input
-              {...register("price")}
+              {...register("price", { required: "Please enter price" })}
               className="formInput"
               type="number"
               placeholder="Daily Price"
             />
+            <p className="text-[#ed6172] font-semibold px-2">
+               {errors.price?.message}
+            </p>
           </div>
           <div className="flex flex-col space-y-2">
             <label className="px-1 text-gray-500">
               What is the maximum guest capacity of your house?
             </label>
             <input
-              {...register("capacity")}
+              {...register("capacity", { required: "Please enter this field" })}
               className="formInput "
               type="number"
               placeholder="Guest capacity"
             />
+            <p className="text-[#007991] font-semibold px-2">
+               {errors.capacity?.message}
+            </p>
           </div>
           <div className="flex flex-col space-y-2">
             <label className="px-1 text-gray-500">
               What is the address of the your house?
             </label>
             <input
-              {...register("address")}
+              {...register("address", {
+                required: "Please enter the house address",
+              })}
               className="formInput"
               type="text"
               placeholder="Address"
             />
+            <p className="text-[#007991] font-semibold px-2">
+               {errors.address?.message}
+            </p>
           </div>
 
           <button

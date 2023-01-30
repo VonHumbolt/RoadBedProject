@@ -8,7 +8,7 @@ function Register() {
 
   const authService = new AuthService();
 
-  const { register, handleSubmit } = useForm();
+  const { register, handleSubmit,formState:{errors} } = useForm();
   const onSubmit = (data) => {
     authService.register(data).then(result => console.log(result.data))
   };
@@ -28,27 +28,31 @@ function Register() {
             className="w-fit sm:w-[400px] mt-5 mx-auto text-center"
             onSubmit={handleSubmit(onSubmit)}
           >
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col space-y-2">
               <input
-                {...register("fullName")}
+                {...register("fullName", {required: "Please enter your name."})}
                 className="formInput z-10"
                 type="text"
                 placeholder="Full Name"
               />
+              <p className="text-[#ED6172] font-semibold px-2 text-start">{errors.fullName?.message}</p>
               <input
-                {...register("email")}
+                {...register("email", {required: "Please enter an email."})}
                 className="formInput"
                 type="email"
                 placeholder="Email"
               />
+              <p className="text-[#ED6172] font-semibold px-2 text-start">{errors.email?.message}</p>
               <input
-                {...register("password")}
+                {...register("password", {required: "Please enter password."})}
                 className="formInput"
                 type="password"
                 placeholder="Password"
               />
+              <p className="text-[#ED6172] font-semibold px-2 text-start">{errors.password?.message}</p>
+
             </div>
-            <p className="text-center py-5">
+            <p className="text-center py-5 my-2">
               Already have an account?{" "}
               <Link href="/login">
                 <span className="font-semibold underline decoration-teal-600 cursor-pointer">
