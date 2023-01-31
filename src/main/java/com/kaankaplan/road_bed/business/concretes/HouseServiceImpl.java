@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -27,14 +28,18 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @Override
+    public List<House> getAll() {
+        return houseRepository.findAll();
+    }
+
+    @Override
         public House save(House house, MultipartFile multipartFile) {
 
-            Map map =  imageUploadService.uploadImage(multipartFile);
-//        map.get("imageUrl");
-        City city = cityService.getCityByName(house.city.cityName);
+            Map uploadResults =  imageUploadService.uploadImage(multipartFile);
+            String imageUrl = (String) uploadResults.get("url");
 
-        House newHouse = new House(house.capacity, "", house.price, city, house.address);
+            house.imageUrl = imageUrl;
 
-        return houseRepository.save(newHouse);
+            return houseRepository.save(house);
     }
 }

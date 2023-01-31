@@ -32,25 +32,36 @@ function Create() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+
   const onSubmit = (data) => {
-    let location = {
-      address: data.address,
-      city: selectedCity,
-    };
+
+    let formData = new FormData();
+
     let house = {
       capacity: data.capacity,
       price: data.price,
       location: location,
+      address: data.address,
+      city: selectedCity,
     };
-    houseService.save(house, user?.accessToken);
+
+    const json = JSON.stringify(house);
+    const blob = new Blob([json], {
+      type: 'application/json'
+    });
+    formData.append("house", blob);
+    formData.append("multipartFile", selectedImages[0]);
+    
+    houseService.save(formData, user?.accessToken);
   };
 
   const selectImageUrl = (e) => {
     if (e.target.files) {
+      setSelectedImages([e.target.files[0]]) // CHANGE
       Object.keys(e.target.files).forEach((file) => {
         const reader = new FileReader();
         reader.onload = (readerEvent) => {
-          setSelectedImages([...selectedImages, readerEvent.target.result]);
+          // setSelectedImages([...selectedImages, readerEvent.target.result]);
         };
         reader.readAsDataURL(e.target.files[file]);
       });
@@ -112,7 +123,7 @@ function Create() {
               type="number"
               placeholder="Guest capacity"
             />
-            <p className="text-[#007991] font-semibold px-2">
+            <p className="text-[#ed6172] font-semibold px-2">
                {errors.capacity?.message}
             </p>
           </div>
@@ -128,7 +139,7 @@ function Create() {
               type="text"
               placeholder="Address"
             />
-            <p className="text-[#007991] font-semibold px-2">
+            <p className="text-[#ed6172] font-semibold px-2">
                {errors.address?.message}
             </p>
           </div>

@@ -4,8 +4,10 @@ import Header from "@/components/Header";
 import Cities from "@/components/Cities";
 import HostRegisterCard from "@/components/HostRegisterCard";
 import Categories from "@/components/Categories";
+import Houses from "@/components/Houses";
 
-export default function Home() {
+export default function Home({houses}) {
+
   return (
     <>
       <Head>
@@ -23,6 +25,7 @@ export default function Home() {
           className="object-cover"
           src="https://images.unsplash.com/photo-1546587348-d12660c30c50?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1748&q=80"
           fill
+          sizes={100}
           alt=""
         />
 
@@ -35,9 +38,11 @@ export default function Home() {
       </div>
 
       <section>
-        
         <Categories />
-
+      </section>
+      
+      <section className="">
+        <Houses houses={houses} />
       </section>
 
       <Cities />
@@ -47,3 +52,16 @@ export default function Home() {
     </>
   );
 }
+
+
+export async function getServerSideProps() {
+  const houses = await fetch("http://localhost:8080/houses/getall")
+      .then(res => res.json());
+
+  return {
+      props: {
+          houses,
+      }
+  }
+}
+

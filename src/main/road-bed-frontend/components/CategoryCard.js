@@ -9,6 +9,7 @@ function CategoryCard() {
                 className='rounded-lg'
                 src="https://img.freepik.com/free-photo/sunrise_74190-169.jpg"
                 fill
+                alt=""
             />
 
         </div>

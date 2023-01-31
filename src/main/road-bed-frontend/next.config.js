@@ -7,7 +7,8 @@ const nextConfig = {
       "images.unsplash.com",
       "www.bizevdeyokuz.com",
       "izmir.ktb.gov.tr",
-      "img.freepik.com"
+      "img.freepik.com",
+      "res.cloudinary.com"
     ]
   }
 }

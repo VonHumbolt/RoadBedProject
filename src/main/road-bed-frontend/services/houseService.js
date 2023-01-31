@@ -3,12 +3,16 @@ import axios from "axios";
 export default class HouseService {
     apiUrl = "http://localhost:8080/houses/";
 
-    save(house, token) {
-        axios.post(this.apiUrl + "save", house, {
+    getall() {
+        axios.get(this.apiUrl + "getall");
+    }
+
+    save(formData, token) {
+        axios.post(this.apiUrl + "save", formData, {
             headers: {
-                "Content-Type": "application/json",
+                'Content-Type':'multipart/form-data',
                 "authorization": token
-            }
+            },
         });
     }
 }
