@@ -2,7 +2,6 @@ package com.kaankaplan.road_bed.entities;
 
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.data.mongodb.core.mapping.Field;
 
 
 @Document(collection = "houses")
@@ -17,14 +16,16 @@ public class House {
 
     public Float price;
 
-    @Field
-    public Location location;
+    public City city;
 
-    public House(int capacity, String imageUrl, Float price, Location location) {
+    public String address;
+
+    public House(int capacity, String imageUrl, Float price, City city, String address) {
         this.capacity = capacity;
         this.imageUrl = imageUrl;
         this.price = price;
-        this.location = location;
+        this.city = city;
+        this.address= address;
     }
 
     public House() { }

@@ -8,6 +8,8 @@ public interface CityService {
 
     List<City> getAllCities();
 
+    City getCityByName(String cityName);
+
     City save(City city);
 
 }

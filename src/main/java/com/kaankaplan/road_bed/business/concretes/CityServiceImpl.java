@@ -24,6 +24,11 @@ public class CityServiceImpl implements CityService {
     }
 
     @Override
+    public City getCityByName(String cityName) {
+        return cityRepository.findCityByCityName(cityName);
+    }
+
+    @Override
     public City save(City city) {
         return cityRepository.save(city);
     }
