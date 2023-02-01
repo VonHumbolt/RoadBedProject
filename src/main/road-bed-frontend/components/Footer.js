@@ -18,10 +18,10 @@ function Footer() {
 
             </div>
             <div>
-                <h3 className='text-lg pb-3 font-semibold'> Contact </h3>
-                <p className='text-slate-800'>Email</p>
-                <p className='text-slate-800'>Phone</p>
-                <p className='text-slate-800'>Fax</p>
+                <h3 className='text-lg pb-3 font-semibold'> Support </h3>
+                <p className='text-slate-800'>Help</p>
+                <p className='text-slate-800'>Accessibility</p>
+                <p className='text-slate-800'>Presents</p>
 
             </div>
             <div>

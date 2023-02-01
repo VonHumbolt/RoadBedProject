@@ -2,33 +2,24 @@ import Header from "@/components/Header";
 import ImageModal from "@/components/ImageModal";
 import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-const getCities = async () => {
-  const result = fetch("http://localhost:8080/cities/getall").then((res) =>
-    res.json()
-  );
-  return result;
-};
 
-function Create() {
+function Create({cities, categories}) {
+
   const user = useSelector(userFromRedux);
 
   const houseService = new HouseService();
 
   const [selectedImageFiles, setSelectedImageFiles] = useState([]);
-  const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
+  const [selectedCategory, setSelectedCategory] = useState()
   const [selectedImageUrls, setSelectedImageUrls] = useState([]);
   const [selectedImageForDetail, setSelectedImageForDetail] = useState()
 
   const fileRef = useRef(null);
-
-  useEffect(() => {
-    getCities().then((res) => setCities(res));
-  }, []);
 
   const {
     register,
@@ -45,6 +36,7 @@ function Create() {
       location: location,
       address: data.address,
       city: selectedCity,
+      category: selectedCategory
     };
 
     const json = JSON.stringify(house);
@@ -78,6 +70,11 @@ function Create() {
     setSelectedCity(selectedCity);
   };
 
+  const handleSelectCategory = (categoryId) => {
+    let category = categories.filter(item => item.categoryId == categoryId)[0];
+    setSelectedCategory(category);
+  }
+
   return (
     <div className="relative">
       <Header />
@@ -100,6 +97,23 @@ function Create() {
               {cities?.map((city) => (
                 <option key={city.cityId} value={city.cityId}>
                   {city.cityName}
+                </option>
+              ))}
+            </select>
+          </div>
+          <div className="flex flex-col space-y-2">
+            <label className="px-1 text-gray-500">
+              What is the category of your house?
+            </label>
+            <select
+              className="formInput px-2"
+              onChange={(e) => {
+                handleSelectCategory(e.target.value);
+              }}
+            >
+              {categories?.map((category) => (
+                <option key={category.categoryId} value={category.categoryId}>
+                  {category.categoryName}
                 </option>
               ))}
             </select>
@@ -206,6 +220,22 @@ function Create() {
     
     </div>
   );
+}
+
+
+export async function getServerSideProps() {
+  const cities = await fetch("http://localhost:8080/cities/getall")
+      .then(res => res.json());
+
+  const categories = await fetch("http://localhost:8080/categories/getall")
+      .then(res => res.json());
+
+  return {
+      props: {
+          cities,
+          categories
+      }
+  }
 }
 
 export default Create;
