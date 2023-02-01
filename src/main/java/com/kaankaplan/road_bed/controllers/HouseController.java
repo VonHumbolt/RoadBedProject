@@ -26,8 +26,8 @@ public class HouseController {
 
     @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
     @PostMapping(path="save")
-    public House saveHouse(@RequestPart("house") House house, @RequestPart("multipartFile") MultipartFile multipartFile){
+    public House saveHouse(@RequestPart("house") House house, @RequestPart("multipartFile") List<MultipartFile> multipartFileList){
 
-        return houseService.save(house, multipartFile);
+        return houseService.save(house, multipartFileList);
     }
 }

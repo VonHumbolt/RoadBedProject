@@ -1,4 +1,5 @@
 import Header from "@/components/Header";
+import ImageModal from "@/components/ImageModal";
 import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
 import React, { useEffect, useRef, useState } from "react";
@@ -15,13 +16,15 @@ const getCities = async () => {
 function Create() {
   const user = useSelector(userFromRedux);
 
-  const [selectedImages, setSelectedImages] = useState([]);
+  const houseService = new HouseService();
+
+  const [selectedImageFiles, setSelectedImageFiles] = useState([]);
   const [cities, setCities] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
+  const [selectedImageUrls, setSelectedImageUrls] = useState([]);
+  const [selectedImageForDetail, setSelectedImageForDetail] = useState()
 
   const fileRef = useRef(null);
-
-  const houseService = new HouseService();
 
   useEffect(() => {
     getCities().then((res) => setCities(res));
@@ -34,7 +37,6 @@ function Create() {
   } = useForm();
 
   const onSubmit = (data) => {
-
     let formData = new FormData();
 
     let house = {
@@ -47,24 +49,27 @@ function Create() {
 
     const json = JSON.stringify(house);
     const blob = new Blob([json], {
-      type: 'application/json'
+      type: "application/json",
     });
     formData.append("house", blob);
-    formData.append("multipartFile", selectedImages[0]);
-    
+    selectedImageFiles.forEach((imageFile) =>
+      formData.append("multipartFile", imageFile)
+    );
+
     houseService.save(formData, user?.accessToken);
   };
 
   const selectImageUrl = (e) => {
     if (e.target.files) {
-      setSelectedImages([e.target.files[0]]) // CHANGE
-      Object.keys(e.target.files).forEach((file) => {
-        const reader = new FileReader();
-        reader.onload = (readerEvent) => {
-          // setSelectedImages([...selectedImages, readerEvent.target.result]);
-        };
-        reader.readAsDataURL(e.target.files[file]);
+      setSelectedImageFiles(Array.from(e.target.files));
+
+      const imagesUrlArray = Array.from(e.target.files).map((image) => {
+        return URL.createObjectURL(image);
       });
+
+      setSelectedImageUrls((previousImageUrls) =>
+        previousImageUrls.concat(imagesUrlArray)
+      );
     }
   };
 
@@ -110,7 +115,7 @@ function Create() {
               placeholder="Daily Price"
             />
             <p className="text-[#ed6172] font-semibold px-2">
-               {errors.price?.message}
+              {errors.price?.message}
             </p>
           </div>
           <div className="flex flex-col space-y-2">
@@ -124,7 +129,7 @@ function Create() {
               placeholder="Guest capacity"
             />
             <p className="text-[#ed6172] font-semibold px-2">
-               {errors.capacity?.message}
+              {errors.capacity?.message}
             </p>
           </div>
           <div className="flex flex-col space-y-2">
@@ -140,9 +145,43 @@ function Create() {
               placeholder="Address"
             />
             <p className="text-[#ed6172] font-semibold px-2">
-               {errors.address?.message}
+              {errors.address?.message}
             </p>
           </div>
+
+          <div className="flex flex-col p-3 pb-5">
+            <label className="text-start mx-auto text-gray-500">
+              Choose images of your house.
+            </label>
+            <img
+              src={
+                "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+              }
+              className="w-52 object-cover mt-5 mx-auto"
+              onClick={() => fileRef.current.click()}
+            />
+          </div>
+
+          {selectedImageUrls.length > 0 && (
+            <div
+              className="max-w-7xl mx-auto flex flex-row space-x-3
+              overflow-x-scroll px-8"
+            >
+              {selectedImageUrls?.map((image) => (
+                
+                  <img
+                    className="w-52 object-cover mt-5 cursor-pointer"
+                    key={image}
+                    src={image}
+                    onClick={() => {
+                      setSelectedImageForDetail(image)
+                      document.getElementById("imageModal").classList.toggle("hidden");
+                    }}
+                  />
+
+              ))}
+            </div>
+          )}
 
           <button
             className="px-10 py-3 bg-teal-400 rounded-lg mx-auto
@@ -153,31 +192,18 @@ function Create() {
           </button>
         </form>
 
-        <div className="flex flex-col p-3">
-          <label className="text-start mx-auto text-gray-500">
-            Choose images of your house.
-          </label>
-          <img
-            src={
-              "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-            }
-            className="w-52 object-cover mt-5 mx-auto"
-            onClick={() => fileRef.current.click()}
-          />
-        </div>
-
-        {selectedImages?.map((image) => (
-          <img key={image} src={image} />
-        ))}
-
         <input
           ref={fileRef}
           hidden
           multiple
           type="file"
+          accept="image/png, image/jpeg, image/webp"
           onChange={selectImageUrl}
         />
       </div>
+
+      <ImageModal imageUrl={selectedImageForDetail} />
+    
     </div>
   );
 }

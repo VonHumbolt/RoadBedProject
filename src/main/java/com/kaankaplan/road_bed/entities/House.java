@@ -3,6 +3,8 @@ package com.kaankaplan.road_bed.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.util.List;
+
 
 @Document(collection = "houses")
 public class House {
@@ -12,17 +14,19 @@ public class House {
 
     public int capacity;
 
-    public String imageUrl;
+    public List<String> imageUrlList;
 
     public Float price;
+
+    public Category category;
 
     public City city;
 
     public String address;
 
-    public House(int capacity, String imageUrl, Float price, City city, String address) {
+    public House(int capacity, List<String> imageUrlList, Float price, City city, String address) {
         this.capacity = capacity;
-        this.imageUrl = imageUrl;
+        this.imageUrlList = imageUrlList;
         this.price = price;
         this.city = city;
         this.address= address;

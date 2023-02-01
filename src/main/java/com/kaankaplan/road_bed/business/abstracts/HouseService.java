@@ -7,7 +7,7 @@ import java.util.List;
 
 public interface HouseService {
 
-    House save(House house, MultipartFile multipartFile);
+    House save(House house, List<MultipartFile> multipartFiles);
 
     List<House> getAll();
 }

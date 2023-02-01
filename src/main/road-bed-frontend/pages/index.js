@@ -6,7 +6,7 @@ import HostRegisterCard from "@/components/HostRegisterCard";
 import Categories from "@/components/Categories";
 import Houses from "@/components/Houses";
 
-export default function Home({houses}) {
+export default function Home({houses, categories}) {
 
   return (
     <>
@@ -33,12 +33,12 @@ export default function Home({houses}) {
           <button className="text-md font-bold bg-[#ed6172] px-8 py-4
            rounded-full cursor-pointer transition duration-200 ease-in-out 
            hover:scale-105 hover:shadow-xl active:scale-90
-          text-white">Discover the World</button>
+          text-white">Explore the World</button>
         </div>
       </div>
 
       <section>
-        <Categories />
+        <Categories categories={categories} />
       </section>
       
       <section className="">
@@ -58,9 +58,14 @@ export async function getServerSideProps() {
   const houses = await fetch("http://localhost:8080/houses/getall")
       .then(res => res.json());
 
+  const categories = await fetch("http://localhost:8080/categories/getall")
+      .then(res => res.json());
+
+     
   return {
       props: {
           houses,
+          categories
       }
   }
 }
