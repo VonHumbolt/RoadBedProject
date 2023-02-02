@@ -7,7 +7,10 @@ import com.kaankaplan.road_bed.entities.City;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
@@ -28,24 +31,28 @@ public class HouseServiceImpl implements HouseService {
         this.cityService = cityService;
     }
 
+    @Cacheable(value = "houses")
     @Override
     public List<House> getAll() {
         return houseRepository.findAll();
     }
 
+
+    @CacheEvict(value = "houses", allEntries = true)
+    @Transactional
     @Override
-        public House save(House house, List<MultipartFile> multipartFiles) {
+    public House save(House house, List<MultipartFile> multipartFiles) {
 
-            List<String> houseImages = new ArrayList<>();
+        List<String> houseImages = new ArrayList<>();
 
-            multipartFiles.forEach((file) -> {
-                Map uploadResults =  imageUploadService.uploadImage(file);
-                String imageUrl = (String) uploadResults.get("url");
-                houseImages.add(imageUrl);
-            });
+        multipartFiles.forEach((file) -> {
+            Map uploadResults =  imageUploadService.uploadImage(file);
+            String imageUrl = (String) uploadResults.get("url");
+            houseImages.add(imageUrl);
+        });
 
-            house.imageUrlList = houseImages;
+        house.imageUrlList = houseImages;
 
-            return houseRepository.save(house);
+        return houseRepository.save(house);
     }
 }

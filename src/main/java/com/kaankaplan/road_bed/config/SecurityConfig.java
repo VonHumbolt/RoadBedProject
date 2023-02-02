@@ -48,8 +48,11 @@ public class SecurityConfig {
                 .authorizeHttpRequests()
                 .requestMatchers(HttpMethod.POST, "/auth/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/cities/**").permitAll()
+                .requestMatchers(HttpMethod.GET,  "/categories/**").permitAll()
+                .requestMatchers(HttpMethod.GET,  "/houses/**").permitAll()
                 .requestMatchers(HttpMethod.POST,  "/cities/**").permitAll()
-                .anyRequest().permitAll();
+                .requestMatchers(HttpMethod.POST,  "/roles/**").permitAll()
+                .anyRequest().authenticated();
 
         http.authenticationProvider(authenticationProvider());
 

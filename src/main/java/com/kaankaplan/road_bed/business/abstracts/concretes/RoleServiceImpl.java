@@ -5,6 +5,7 @@ import com.kaankaplan.road_bed.entities.Role;
 import com.kaankaplan.road_bed.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class RoleServiceImpl implements RoleService {
@@ -21,6 +22,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByRoleName(roleName);
     }
 
+    @Transactional
     @Override
     public Role addRole(Role role) {
         return roleRepository.insert(role);

@@ -8,7 +8,8 @@ const nextConfig = {
       "www.bizevdeyokuz.com",
       "izmir.ktb.gov.tr",
       "img.freepik.com",
-      "res.cloudinary.com"
+      "res.cloudinary.com",
+      "cdn.londonandpartners.com"
     ]
   }
 }

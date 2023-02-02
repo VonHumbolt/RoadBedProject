@@ -47,7 +47,7 @@ function Create({cities, categories}) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-
+    
     houseService.save(formData, user?.accessToken);
   };
 

@@ -4,6 +4,8 @@ import com.kaankaplan.road_bed.business.abstracts.UserService;
 import com.kaankaplan.road_bed.entities.User;
 import com.kaankaplan.road_bed.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -12,7 +14,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -24,11 +25,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
         this.userRepository = userRepository;
     }
 
+    @Cacheable(value = "users")
     @Override
     public List<User> getAllUsers() {
         return userRepository.findAll();
     }
 
+    @CacheEvict(value = "users", allEntries = true)
     @Transactional
     @Override
     public User addUser(User user) {

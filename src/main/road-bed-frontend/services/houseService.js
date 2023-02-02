@@ -11,7 +11,7 @@ export default class HouseService {
         axios.post(this.apiUrl + "save", formData, {
             headers: {
                 'Content-Type':'multipart/form-data',
-                "authorization": token
+                "Authorization": `Bearer ${token}`
             },
         });
     }

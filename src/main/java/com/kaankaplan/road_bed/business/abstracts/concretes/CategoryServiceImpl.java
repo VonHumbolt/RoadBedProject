@@ -4,6 +4,8 @@ import com.kaankaplan.road_bed.business.abstracts.CategoryService;
 import com.kaankaplan.road_bed.entities.Category;
 import com.kaankaplan.road_bed.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -18,11 +20,13 @@ public class CategoryServiceImpl implements CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
+    @Cacheable(value = "categories")
     @Override
     public List<Category> getAllCategories() {
         return categoryRepository.findAll();
     }
 
+    @CacheEvict(value = "categories", allEntries = true)
     @Override
     public Category save(Category category) {
         return categoryRepository.save(category);

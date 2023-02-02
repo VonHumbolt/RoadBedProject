@@ -9,7 +9,7 @@ export default function Houses({ houses }) {
           <Image
             key={house.houseId}
             className="w-52 h-52 object-cover rounded-xl"
-            src={house.imageUrlList[2]}
+            src={house.imageUrlList[0]}
             alt=""
             width={100}
             height={100}

@@ -5,12 +5,46 @@ import Link from "next/link";
 import HeaderMenu from "./HeaderMenu";
 import { userFromRedux } from "@/redux/userSlice";
 import { useSelector } from "react-redux";
+import "react-date-range/dist/styles.css"; // main style file
+import "react-date-range/dist/theme/default.css"; // theme css file
+import { DateRange, DateRangePicker } from "react-date-range";
+import { useRouter } from "next/router";
 
 function Header() {
-
   const user = useSelector(userFromRedux);
 
+  const router = useRouter();
+
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [searchInput, setSearchInput] = useState();
+  const [startDate, setStartDate] = useState(new Date());
+  const [endDate, setEndDate] = useState(new Date());
+
+  const selectionRange = {
+    startDate: startDate,
+    endDate: endDate,
+    key: "selection",
+  };
+
+  const handleSelectDate = (ranges) => {
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
+  };
+
+  const resetInput = () => {
+    setSearchInput("");
+  };
+
+  const search = () => {
+    router.push({
+      pathname: "/search",
+      query: {
+        city: searchInput,
+        startDate: startDate.toISOString(),
+        endDate: endDate.toISOString()
+      }
+    })
+  }
 
   return (
     <header className="shadow-lg p-5 sticky top-0 bg-white z-20">
@@ -23,12 +57,13 @@ function Header() {
             </h3>
           </div>
         </Link>
-
         <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm">
           <input
             className="flex-grow outline-none bg-transparent pl-5 text-sm text-gray-600
               placeholder-gray-400"
             placeholder="Search"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
           />
           <SearchIcon
             className="hidden md:inline-flex md:mx-2 h-8 bg-teal-400 p-2 rounded-full
@@ -58,6 +93,33 @@ function Header() {
           </div>
         </div>
       </div>
+
+      {searchInput && (
+        <div className="max-w-7xl mx-auto text-center mt-1">
+          <DateRange
+            ranges={[selectionRange]}
+            minDate={new Date()}
+            rangeColors={["#14B8A5"]}
+            onChange={handleSelectDate}
+          />
+          <div className="flex flex-row w-52 mx-auto justify-between">
+            <p
+              className="text-slate-800 cursor-pointer
+            hover:underline"
+              onClick={() => resetInput()}
+            >
+              Cancel
+            </p>
+            <p
+              className="text-teal-500 cursor-pointer
+            hover:underline"
+              onClick={() => search()}
+            >
+              Search
+            </p>
+          </div>
+        </div>
+      )}
     </header>
   );
 }

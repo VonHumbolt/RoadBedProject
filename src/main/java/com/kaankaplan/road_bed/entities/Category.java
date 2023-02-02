@@ -3,8 +3,10 @@ package com.kaankaplan.road_bed.entities;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.io.Serializable;
+
 @Document(collection = "categories")
-public class Category {
+public class Category implements Serializable {
     @Id
     private String categoryId;
     public String categoryName;
