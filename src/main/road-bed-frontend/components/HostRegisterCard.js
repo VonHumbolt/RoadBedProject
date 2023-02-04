@@ -4,7 +4,7 @@ import React from "react";
 function HostRegisterCard() {
   return (
     <div //[#ed6172]
-      className="mt-24 relative w-[400px] sm:w-[600px]
+      className="mt-16 relative w-[400px] sm:w-[600px]
         md:w-[800px] lg:w-[900px] xl:w-[1000px] 2xl:w-[1100px]
      bg-gradient-to-r from-teal-500 to-slate-500 mx-auto p-5 rounded-2xl"
     >

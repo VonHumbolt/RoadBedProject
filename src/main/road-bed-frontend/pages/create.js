@@ -1,23 +1,23 @@
 import Header from "@/components/Header";
-import ImageModal from "@/components/ImageModal";
+import ImageDialog from "@/components/ImageDialog";
 import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
+import { PlusCircleIcon } from "@heroicons/react/solid";
 import React, { useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
-
-function Create({cities, categories}) {
-
+function Create({ cities, categories }) {
   const user = useSelector(userFromRedux);
 
   const houseService = new HouseService();
 
   const [selectedImageFiles, setSelectedImageFiles] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
-  const [selectedCategory, setSelectedCategory] = useState()
+  const [selectedCategory, setSelectedCategory] = useState();
   const [selectedImageUrls, setSelectedImageUrls] = useState([]);
-  const [selectedImageForDetail, setSelectedImageForDetail] = useState()
+  const [selectedImageForDetail, setSelectedImageForDetail] = useState();
+  const [isOpen, setIsOpen] = useState(false);
 
   const fileRef = useRef(null);
 
@@ -36,7 +36,7 @@ function Create({cities, categories}) {
       location: location,
       address: data.address,
       city: selectedCity,
-      category: selectedCategory
+      category: selectedCategory,
     };
 
     const json = JSON.stringify(house);
@@ -47,7 +47,7 @@ function Create({cities, categories}) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-    
+
     houseService.save(formData, user?.accessToken);
   };
 
@@ -71,8 +71,18 @@ function Create({cities, categories}) {
   };
 
   const handleSelectCategory = (categoryId) => {
-    let category = categories.filter(item => item.categoryId == categoryId)[0];
+    let category = categories.filter(
+      (item) => item.categoryId == categoryId
+    )[0];
     setSelectedCategory(category);
+  };
+
+  function closeModal() {
+    setIsOpen(false);
+    const imageList = selectedImageUrls.filter(
+      (image) => image !== selectedImageForDetail
+    );
+    setSelectedImageUrls(imageList);
   }
 
   return (
@@ -167,32 +177,39 @@ function Create({cities, categories}) {
             <label className="text-start mx-auto text-gray-500">
               Choose images of your house.
             </label>
-            <img
-              src={
-                "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-              }
-              className="w-52 object-cover mt-5 mx-auto"
-              onClick={() => fileRef.current.click()}
-            />
+
+            {!selectedImageUrls.length > 0 ? (
+              <img
+                src={
+                  "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
+                }
+                className="w-52 object-cover mt-5 mx-auto cursor-pointer"
+                onClick={() => fileRef.current.click()}
+              />
+            ) : (
+              <PlusCircleIcon
+                className="w-10 cursor-pointer hover:scale-105 transform transition-all duration-150 ease-in-out"
+                color="#14b8a5"
+                onClick={() => fileRef.current.click()}
+              />
+            )}
           </div>
 
           {selectedImageUrls.length > 0 && (
             <div
               className="max-w-7xl mx-auto flex flex-row space-x-3
-              overflow-x-scroll px-8"
+              overflow-x-scroll px-8 py-3 scrollbar-thin scrollbar-thumb-teal-600"
             >
               {selectedImageUrls?.map((image) => (
-                
-                  <img
-                    className="w-52 object-cover mt-5 cursor-pointer"
-                    key={image}
-                    src={image}
-                    onClick={() => {
-                      setSelectedImageForDetail(image)
-                      document.getElementById("imageModal").classList.toggle("hidden");
-                    }}
-                  />
-
+                <img
+                  className="w-52 object-cover mt-5 cursor-pointer"
+                  key={image}
+                  src={image}
+                  onClick={() => {
+                    setIsOpen(true);
+                    setSelectedImageForDetail(image);
+                  }}
+                />
               ))}
             </div>
           )}
@@ -216,26 +233,32 @@ function Create({cities, categories}) {
         />
       </div>
 
-      <ImageModal imageUrl={selectedImageForDetail} />
-    
+      {isOpen && (
+        <ImageDialog
+          imageUrl={selectedImageForDetail}
+          isOpen={isOpen}
+          closeModal={closeModal}
+        />
+      )}
     </div>
   );
 }
 
-
 export async function getServerSideProps() {
-  const cities = await fetch("http://localhost:8080/cities/getall")
-      .then(res => res.json());
+  const cities = await fetch("http://localhost:8080/cities/getall").then(
+    (res) => res.json()
+  );
 
-  const categories = await fetch("http://localhost:8080/categories/getall")
-      .then(res => res.json());
+  const categories = await fetch(
+    "http://localhost:8080/categories/getall"
+  ).then((res) => res.json());
 
   return {
-      props: {
-          cities,
-          categories
-      }
-  }
+    props: {
+      cities,
+      categories,
+    },
+  };
 }
 
 export default Create;

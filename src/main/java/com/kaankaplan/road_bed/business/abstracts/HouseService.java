@@ -10,4 +10,8 @@ public interface HouseService {
     House save(House house, List<MultipartFile> multipartFiles);
 
     List<House> getAll();
+
+    List<House> getHousesByCategoryName(String categoryName);
+
+    List<House> getHousesByCityName(String cityName);
 }

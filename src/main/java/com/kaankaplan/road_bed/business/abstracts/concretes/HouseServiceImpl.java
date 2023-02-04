@@ -37,6 +37,15 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.findAll();
     }
 
+    @Override
+    public List<House> getHousesByCategoryName(String categoryName) {
+        return houseRepository.findHousesByCategoryCategoryName(categoryName);
+    }
+
+    @Override
+    public List<House> getHousesByCityName(String cityName) {
+        return houseRepository.findHousesByCity_CityName(cityName);
+    }
 
     @CacheEvict(value = "houses", allEntries = true)
     @Transactional

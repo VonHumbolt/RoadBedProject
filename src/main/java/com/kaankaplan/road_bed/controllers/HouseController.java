@@ -24,6 +24,16 @@ public class HouseController {
         return houseService.getAll();
     }
 
+    @GetMapping("getByCategoryName/{categoryName}")
+    public List<House> getHousesByCategoryName(@PathVariable String categoryName) {
+        return houseService.getHousesByCategoryName(categoryName);
+    }
+
+    @GetMapping("getByCityName/{cityName}")
+    public List<House> getHousesByCityName(@PathVariable String cityName) {
+        return houseService.getHousesByCityName(cityName);
+    }
+
     @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
     @PostMapping(path="save")
     public House saveHouse(@RequestPart("house") House house, @RequestPart("multipartFile") List<MultipartFile> multipartFileList){

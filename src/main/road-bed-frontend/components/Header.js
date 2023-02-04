@@ -7,7 +7,7 @@ import { userFromRedux } from "@/redux/userSlice";
 import { useSelector } from "react-redux";
 import "react-date-range/dist/styles.css"; // main style file
 import "react-date-range/dist/theme/default.css"; // theme css file
-import { DateRange, DateRangePicker } from "react-date-range";
+import { DateRange } from "react-date-range";
 import { useRouter } from "next/router";
 
 function Header() {

@@ -3,7 +3,8 @@ import React from "react";
 
 export default function Houses({ houses }) {
   return (
-    <div className="px-8 sm:px-16 mt-6 max-w-7xl mx-auto">
+    <div className="px-8 sm:px-16 mt-24 max-w-7xl mx-auto flex space-x-2 overflow-x-scroll
+    scrollbar-thin scrollbar-thumb-teal-600">
       {houses.map((house) => (
         <div>
           <Image
@@ -14,7 +15,7 @@ export default function Houses({ houses }) {
             width={100}
             height={100}
           />
-          <p>{house.city.cityName}</p>
+          <p className="font-semibold p-1">{house.city.cityName}</p>
         </div>
       ))}
     </div>
