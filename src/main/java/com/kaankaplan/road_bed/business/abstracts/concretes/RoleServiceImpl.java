@@ -1,6 +1,7 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
 import com.kaankaplan.road_bed.business.abstracts.RoleService;
+import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.Role;
 import com.kaankaplan.road_bed.repositories.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,6 +23,7 @@ public class RoleServiceImpl implements RoleService {
         return roleRepository.findByRoleName(roleName);
     }
 
+    @ToLog
     @Transactional
     @Override
     public Role addRole(Role role) {

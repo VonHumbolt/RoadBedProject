@@ -3,6 +3,7 @@ package com.kaankaplan.road_bed.business.abstracts.concretes;
 import com.kaankaplan.road_bed.business.abstracts.CityService;
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
+import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.City;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
@@ -48,6 +49,7 @@ public class HouseServiceImpl implements HouseService {
     }
 
     @CacheEvict(value = "houses", allEntries = true)
+    @ToLog
     @Transactional
     @Override
     public House save(House house, List<MultipartFile> multipartFiles) {

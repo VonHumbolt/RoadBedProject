@@ -3,6 +3,7 @@ package com.kaankaplan.road_bed.business.abstracts.concretes;
 import com.kaankaplan.road_bed.business.abstracts.RoleService;
 import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.business.abstracts.UserService;
+import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
 import com.kaankaplan.road_bed.entities.Role;
 import com.kaankaplan.road_bed.entities.Tenant;
@@ -30,6 +31,7 @@ public class TenantServiceImpl implements TenantService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @ToLog
     @Transactional
     @Override
     public Tenant saveTenant(TenantRegisterRequest tenantRegisterRequest) {

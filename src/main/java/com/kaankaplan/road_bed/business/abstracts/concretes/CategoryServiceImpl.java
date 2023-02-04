@@ -1,6 +1,7 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
 import com.kaankaplan.road_bed.business.abstracts.CategoryService;
+import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.Category;
 import com.kaankaplan.road_bed.repositories.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +28,7 @@ public class CategoryServiceImpl implements CategoryService {
     }
 
     @CacheEvict(value = "categories", allEntries = true)
+    @ToLog
     @Override
     public Category save(Category category) {
         return categoryRepository.save(category);
