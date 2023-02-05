@@ -12,7 +12,7 @@ export default function Houses({ houses }) {
             className="w-52 h-52 object-cover rounded-xl"
             src={house.imageUrlList[0]}
             alt=""
-            width={100}
+            width={1200}
             height={100}
           />
           <p className="font-semibold p-1">{house.city.cityName}</p>
