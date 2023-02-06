@@ -1,10 +1,8 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
-import com.kaankaplan.road_bed.business.abstracts.CityService;
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
-import com.kaankaplan.road_bed.entities.City;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,13 +21,11 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
     private final ImageUploadService imageUploadService;
-    private final CityService cityService;
 
     @Autowired
-    public HouseServiceImpl(HouseRepository houseRepository, ImageUploadService imageUploadService, CityService cityService) {
+    public HouseServiceImpl(HouseRepository houseRepository, ImageUploadService imageUploadService) {
         this.houseRepository = houseRepository;
         this.imageUploadService = imageUploadService;
-        this.cityService = cityService;
     }
 
     @Cacheable(value = "houses")
