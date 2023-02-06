@@ -26,7 +26,6 @@ function Cities() {
       <div className="grid grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
          {cities?.map((item) => (
           <SmallCard key={item.cityName} img={item.cityImageUrl} name={item.cityName} /> 
-          
         ))} 
       </div>
     </div>

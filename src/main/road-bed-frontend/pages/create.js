@@ -77,7 +77,11 @@ function Create({ cities, categories }) {
     setSelectedCategory(category);
   };
 
-  function closeModal() {
+  const closeModal = () => {
+    setIsOpen(false);
+  }
+
+  const removeImageModal = () => {
     setIsOpen(false);
     const imageList = selectedImageUrls.filter(
       (image) => image !== selectedImageForDetail
@@ -238,6 +242,7 @@ function Create({ cities, categories }) {
           imageUrl={selectedImageForDetail}
           isOpen={isOpen}
           closeModal={closeModal}
+          removeImageModal={removeImageModal}
         />
       )}
     </div>

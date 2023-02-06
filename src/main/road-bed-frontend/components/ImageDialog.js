@@ -5,6 +5,7 @@ export default function ImageDialog({
   imageUrl,
   isOpen,
   closeModal,
+  removeImageModal
 }) {
   return (
     <>
@@ -46,7 +47,7 @@ export default function ImageDialog({
                     <button
                       type="button"
                       className="inline-flex justify-center rounded-md border border-transparent bg-[#ed6172] px-4 py-2 text-sm font-medium text-white hover:bg-[#ed6172]/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ed6172] focus-visible:ring-offset-2"
-                      onClick={closeModal}
+                      onClick={removeImageModal}
                     >
                       Remove
                     </button>
