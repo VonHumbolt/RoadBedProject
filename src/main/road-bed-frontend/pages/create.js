@@ -17,9 +17,11 @@ function Create({ cities, categories }) {
   const [selectedCategory, setSelectedCategory] = useState();
   const [selectedImageUrls, setSelectedImageUrls] = useState([]);
   const [selectedImageForDetail, setSelectedImageForDetail] = useState();
+  const [firstImage, setFirstImage] = useState();
   const [isOpen, setIsOpen] = useState(false);
 
   const fileRef = useRef(null);
+  const formBtnRef = useRef(null);
 
   const {
     register,
@@ -35,6 +37,7 @@ function Create({ cities, categories }) {
       price: data.price,
       location: location,
       address: data.address,
+      description: data.description,
       city: selectedCity,
       category: selectedCategory,
     };
@@ -62,6 +65,9 @@ function Create({ cities, categories }) {
       setSelectedImageUrls((previousImageUrls) =>
         previousImageUrls.concat(imagesUrlArray)
       );
+
+      let firstImage = imagesUrlArray[0];
+      setFirstImage(firstImage);
     }
   };
 
@@ -79,7 +85,7 @@ function Create({ cities, categories }) {
 
   const closeModal = () => {
     setIsOpen(false);
-  }
+  };
 
   const removeImageModal = () => {
     setIsOpen(false);
@@ -87,145 +93,194 @@ function Create({ cities, categories }) {
       (image) => image !== selectedImageForDetail
     );
     setSelectedImageUrls(imageList);
-  }
+  };
 
   return (
     <div className="relative">
       <Header />
-      <div className="max-w-7xl mx-auto">
-        <h2 className="text-center text-4xl font-bold mt-20">Save House</h2>
-        <form
-          className="flex flex-col mx-auto gap-2 w-fit mt-10 space-y-3"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="flex flex-col space-y-2">
-            <label className="px-1 text-gray-500">
-              In which city is your house located?
-            </label>
-            <select
-              className="formInput px-2"
-              onChange={(e) => {
-                handleSelectCity(e.target.value);
-              }}
+      <div className="max-w-7xl mx-auto my-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2">
+          <div>
+            <h2 className="text-center text-3xl font-semibold mt-20">Save Your House</h2>
+            <form
+              className="flex flex-col mx-auto gap-2 w-fit mt-10 space-y-3"
+              onSubmit={handleSubmit(onSubmit)}
             >
-              {cities?.map((city) => (
-                <option key={city.cityId} value={city.cityId}>
-                  {city.cityName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="px-1 text-gray-500">
-              What is the category of your house?
-            </label>
-            <select
-              className="formInput px-2"
-              onChange={(e) => {
-                handleSelectCategory(e.target.value);
-              }}
-            >
-              {categories?.map((category) => (
-                <option key={category.categoryId} value={category.categoryId}>
-                  {category.categoryName}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="px-1 text-gray-500">
-              How much income do you want to earn?
-            </label>
-            <input
-              {...register("price", { required: "Please enter price" })}
-              className="formInput"
-              type="number"
-              placeholder="Daily Price"
-            />
-            <p className="text-[#ed6172] font-semibold px-2">
-              {errors.price?.message}
-            </p>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="px-1 text-gray-500">
-              What is the maximum guest capacity of your house?
-            </label>
-            <input
-              {...register("capacity", { required: "Please enter this field" })}
-              className="formInput "
-              type="number"
-              placeholder="Guest capacity"
-            />
-            <p className="text-[#ed6172] font-semibold px-2">
-              {errors.capacity?.message}
-            </p>
-          </div>
-          <div className="flex flex-col space-y-2">
-            <label className="px-1 text-gray-500">
-              What is the address of the your house?
-            </label>
-            <input
-              {...register("address", {
-                required: "Please enter the house address",
-              })}
-              className="formInput"
-              type="text"
-              placeholder="Address"
-            />
-            <p className="text-[#ed6172] font-semibold px-2">
-              {errors.address?.message}
-            </p>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  In which city is your house located?
+                </label>
+                <select
+                  className="formInput px-2"
+                  onChange={(e) => {
+                    handleSelectCity(e.target.value);
+                  }}
+                >
+                  {cities?.map((city) => (
+                    <option key={city.cityId} value={city.cityId}>
+                      {city.cityName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  What is the category of your house?
+                </label>
+                <select
+                  className="formInput px-2"
+                  onChange={(e) => {
+                    handleSelectCategory(e.target.value);
+                  }}
+                >
+                  {categories?.map((category) => (
+                    <option
+                      key={category.categoryId}
+                      value={category.categoryId}
+                    >
+                      {category.categoryName}
+                    </option>
+                  ))}
+                </select>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  How much income do you want to earn?
+                </label>
+                <input
+                  {...register("price", { required: "Please enter price" })}
+                  className="formInput"
+                  type="number"
+                  placeholder="Daily Price"
+                />
+                <p className="text-[#ed6172] font-semibold px-2">
+                  {errors.price?.message}
+                </p>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  What is the maximum guest capacity of your house?
+                </label>
+                <input
+                  {...register("capacity", {
+                    required: "Please enter this field",
+                  })}
+                  className="formInput "
+                  type="number"
+                  placeholder="Guest capacity"
+                  min={1}
+                />
+                <p className="text-[#ed6172] font-semibold px-2">
+                  {errors.capacity?.message}
+                </p>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  What is the address of the your house?
+                </label>
+                <input
+                  {...register("address", {
+                    required: "Please enter the house address",
+                  })}
+                  className="formInput"
+                  type="text"
+                  placeholder="Address"
+                />
+                <p className="text-[#ed6172] font-semibold px-2">
+                  {errors.address?.message}
+                </p>
+              </div>
+              <div className="flex flex-col space-y-2">
+                <label className="px-1 text-gray-500">
+                  Write small description about your house.
+                </label>
+                <input
+                  {...register("description", {
+                    required: "Please enter description",
+                  })}
+                  className="formInput"
+                  type="text"
+                  placeholder="Small Description"
+                />
+                <p className="text-[#ed6172] font-semibold px-2">
+                  {errors.address?.message}
+                </p>
+              </div>
+
+              <button
+                ref={formBtnRef}
+                className="px-10 py-3 bg-teal-400 rounded-lg mx-auto
+                text-lg font-semibold shadow-md hover:shadow-lg hover:bg-teal-100 hidden"
+                type="submit"
+              >
+                Save House
+              </button>
+            </form>
           </div>
 
-          <div className="flex flex-col p-3 pb-5">
-            <label className="text-start mx-auto text-gray-500">
-              Choose images of your house.
-            </label>
+          <div className="">
+            <div className="relative flex flex-col p-3 pb-5 mt-5 sm:mt-36">
+              <label className="text-start mx-auto sm:mx-0 text-gray-500">
+                Choose images of your house.
+              </label>
 
-            {!selectedImageUrls.length > 0 ? (
-              <img
-                src={
-                  "https://www.slntechnologies.com/wp-content/uploads/2017/08/ef3-placeholder-image.jpg"
-                }
-                className="w-52 object-cover mt-5 mx-auto cursor-pointer"
-                onClick={() => fileRef.current.click()}
-              />
-            ) : (
+                <img
+                  src={
+                    firstImage ||
+                    "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="
+                  }
+                  className="w-96 h-52 object-cover mt-3 mx-auto sm:mx-0 cursor-pointer rounded-lg"
+                  onClick={() => {
+                    if(firstImage){
+                      setIsOpen(true);
+                      setSelectedImageForDetail(firstImage);
+                    } else {
+                      fileRef.current.click()
+                    }
+                  }}
+                />
+             
+
               <PlusCircleIcon
-                className="w-10 cursor-pointer hover:scale-105 transform transition-all duration-150 ease-in-out"
+                className="w-10 absolute bottom-0 right-10 sm:right-0 sm:-bottom-2 md:right-6 lg:right-56
+                  cursor-pointer hover:scale-105 transform transition-all duration-150 ease-in-out"
                 color="#14b8a5"
                 onClick={() => fileRef.current.click()}
               />
-            )}
-          </div>
-
-          {selectedImageUrls.length > 0 && (
-            <div
-              className="max-w-7xl mx-auto flex flex-row space-x-3
-              overflow-x-scroll px-8 py-3 scrollbar-thin scrollbar-thumb-teal-600"
-            >
-              {selectedImageUrls?.map((image) => (
-                <img
-                  className="w-52 object-cover mt-5 cursor-pointer"
-                  key={image}
-                  src={image}
-                  onClick={() => {
-                    setIsOpen(true);
-                    setSelectedImageForDetail(image);
-                  }}
-                />
-              ))}
             </div>
-          )}
 
-          <button
-            className="px-10 py-3 bg-teal-400 rounded-lg mx-auto
-            text-lg font-semibold shadow-md hover:shadow-lg hover:bg-teal-100"
-            type="submit"
-          >
-            Save House
-          </button>
-        </form>
+            {selectedImageUrls.length > 0 && (
+              <div
+                className="max-w-7xl w-96 flex flex-row space-x-3
+                overflow-x-scroll mx-auto md:mx-4 py-3 scrollbar-thin scrollbar-thumb-teal-600"
+              >
+                {selectedImageUrls?.map((image) => (
+                  <img
+                    className={`w-52 object-cover mt-5 cursor-pointer rounded-lg
+                     ${firstImage === image ? "hidden" : "visible"}`}
+                    key={image}
+                    src={image}
+                    onClick={() => {
+                      setIsOpen(true);
+                      setSelectedImageForDetail(image);
+                    }}
+                  />
+                ))}
+              </div>
+            )}
+
+            <div className="text-center md:w-96 md:text-center md:mx-4">
+              <button
+                className="px-10 py-1 bg-teal-400 rounded-lg mt-5 sm:mt-16
+                text-lg font-semibold shadow-md hover:shadow-lg hover:bg-teal-100"
+                onClick={() => formBtnRef.current.click()}
+              >
+                Save
+              </button>
+
+            </div>
+          </div>
+        </div>
 
         <input
           ref={fileRef}
