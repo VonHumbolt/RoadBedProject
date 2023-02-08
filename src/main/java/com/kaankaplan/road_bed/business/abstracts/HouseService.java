@@ -14,4 +14,6 @@ public interface HouseService {
     List<House> getHousesByCategoryName(String categoryName);
 
     List<House> getHousesByCityName(String cityName);
+
+    House getHouseByHouseId(String houseId);
 }

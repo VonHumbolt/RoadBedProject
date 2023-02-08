@@ -59,7 +59,7 @@ function Search() {
 
   return (
     <div>
-        <Header />
+        <Header searchQuery={`${city} · ${formattedStartDate} -  ${formattedEndDate}`}/>
 
         <div className='max-w-7xl h-screen mx-auto px-8'>
 

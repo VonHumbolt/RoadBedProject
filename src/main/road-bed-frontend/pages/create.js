@@ -298,6 +298,7 @@ function Create({ cities, categories }) {
           isOpen={isOpen}
           closeModal={closeModal}
           removeImageModal={removeImageModal}
+          isRemoveBtnExist={true}
         />
       )}
     </div>

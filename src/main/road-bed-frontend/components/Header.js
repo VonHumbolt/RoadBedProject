@@ -10,7 +10,7 @@ import "react-date-range/dist/theme/default.css"; // theme css file
 import { DateRange } from "react-date-range";
 import { useRouter } from "next/router";
 
-function Header() {
+function Header({searchQuery}) {
   const user = useSelector(userFromRedux);
 
   const router = useRouter();
@@ -61,7 +61,7 @@ function Header() {
           <input
             className="flex-grow outline-none bg-transparent pl-5 text-sm text-gray-600
               placeholder-gray-400"
-            placeholder="Search"
+            placeholder={searchQuery || "Search"}
             value={searchInput}
             onChange={(e) => setSearchInput(e.target.value)}
           />

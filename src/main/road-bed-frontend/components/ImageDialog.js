@@ -5,7 +5,8 @@ export default function ImageDialog({
   imageUrl,
   isOpen,
   closeModal,
-  removeImageModal
+  removeImageModal,
+  isRemoveBtnExist
 }) {
   return (
     <>
@@ -43,15 +44,17 @@ export default function ImageDialog({
                     />
                   </div>
 
-                  <div className="mt-4">
-                    <button
-                      type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-[#ed6172] px-4 py-2 text-sm font-medium text-white hover:bg-[#ed6172]/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ed6172] focus-visible:ring-offset-2"
-                      onClick={removeImageModal}
-                    >
-                      Remove
-                    </button>
-                  </div>
+                  {isRemoveBtnExist && (
+                    <div className="mt-4">
+                      <button
+                        type="button"
+                        className="inline-flex justify-center rounded-md border border-transparent bg-[#ed6172] px-4 py-2 text-sm font-medium text-white hover:bg-[#ed6172]/70 focus:outline-none focus-visible:ring-2 focus-visible:ring-[#ed6172] focus-visible:ring-offset-2"
+                        onClick={removeImageModal}
+                      >
+                        Remove
+                      </button>
+                    </div>
+                  )}
                 </Dialog.Panel>
               </Transition.Child>
             </div>

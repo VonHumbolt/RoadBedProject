@@ -44,6 +44,11 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.findHousesByCity_CityName(cityName);
     }
 
+    @Override
+    public House getHouseByHouseId(String houseId) {
+        return houseRepository.findHouseByHouseId(houseId);
+    }
+
     @CacheEvict(value = "houses", allEntries = true)
     @ToLog
     @Transactional

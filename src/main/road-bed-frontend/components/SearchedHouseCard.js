@@ -1,12 +1,14 @@
 import Image from 'next/image'
 import React, { useState } from 'react'
 import { HeartIcon } from '@heroicons/react/outline'
+import Link from 'next/link'
 
 function SearchedHouseCard({house}) {
 
   const [isFavorite, setIsFavorite] = useState(false)
-
+  
   return (
+    <Link href={"/detail/" + house.houseId}>
     <div className='flex justify-between border-b border-gray-200 shadow-md rounded-lg my-2
       hover:scale-105 transition-all transform duration-200 ease-in-out cursor-pointer'>
 
@@ -31,6 +33,7 @@ function SearchedHouseCard({house}) {
             <p className='text-lg font-semibold'>{house.price}₺</p>
         </div>
     </div>
+    </Link>
   )
 }
 

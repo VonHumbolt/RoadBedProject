@@ -34,6 +34,11 @@ public class HouseController {
         return houseService.getHousesByCityName(cityName);
     }
 
+    @GetMapping("getById/{houseId}")
+    public House getHouseByHouseId(@PathVariable String houseId) {
+        return houseService.getHouseByHouseId(houseId);
+    }
+
     @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
     @PostMapping(path="save")
     public House saveHouse(@RequestPart("house") House house, @RequestPart("multipartFile") List<MultipartFile> multipartFileList){

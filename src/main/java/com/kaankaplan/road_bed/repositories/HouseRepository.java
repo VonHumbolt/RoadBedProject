@@ -13,4 +13,5 @@ public interface HouseRepository extends MongoRepository<House, String> {
 
     List<House> findHousesByCity_CityName(String cityName);
 
+    House findHouseByHouseId(String houseId);
 }
