@@ -6,7 +6,7 @@ import Link from 'next/link'
 function SearchedHouseCard({house}) {
 
   const [isFavorite, setIsFavorite] = useState(false)
-  
+  console.log(house)
   return (
     <Link href={"/detail/" + house.houseId}>
     <div className='flex justify-between border-b border-gray-200 shadow-md rounded-lg my-2
@@ -17,7 +17,7 @@ function SearchedHouseCard({house}) {
         </div>
 
         <div className='flex-grow p-6 space-y-1'>
-            <h3 className='text-lg font-semibold text-gray-700'>Small Description</h3>
+            <h3 className='text-lg font-semibold text-gray-700'>{house.description}</h3>
             <p className='text-gray-500 text-sm'>{house.category.categoryName} · {house.capacity} guests</p>
             <p className='text-gray-600 text-md'>{house.address}</p>
         </div>

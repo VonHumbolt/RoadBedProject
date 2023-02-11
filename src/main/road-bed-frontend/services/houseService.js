@@ -6,7 +6,7 @@ export default class HouseService {
     getall() {
         axios.get(this.apiUrl + "getall");
     }
-
+    
     save(formData, token) {
         axios.post(this.apiUrl + "save", formData, {
             headers: {

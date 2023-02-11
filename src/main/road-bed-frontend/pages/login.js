@@ -23,20 +23,21 @@ function Login() {
   };
 
   return (
-    <div className="h-screen">
+    <div className="h-screen bg-gray-50">
       <Header />
-      <div className="flex flex-row bg-gray-100">
-        <div className="w-1/2">
+      <div className="grid grid-cols-1 lg:grid-cols-2 w-[500px] sm:w-[1000px] h-[1000px] sm:h-[800px] mx-auto rounded-2xl bg-white shadow-lg
+        mt-24 px-2 sm:px-0">
+        <div className="mx-auto">
           <img
-            className="h-[1200px] object-cover object-bottom"
+            className="h-full sm:rounded-l-2xl  object-cover object-bottom"
             src="https://images.pexels.com/photos/599459/pexels-photo-599459.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
           />
         </div>
 
-        <div className="w-1/2 flex flex-col items-center mt-24">
+        <div className="flex flex-col items-center mt-16 w-[400px] sm:w-full mx-auto">
           <div>
             <img className="mx-auto mb-1" src="./road_icon.png" />
-            <h2 className="text-5xl font-semibold">Road Bed</h2>
+            <h2 className="text-5xl font-semibold text-teal-600">Road Bed</h2>
           </div>
 
           <h4 className="py-16 text-lg text-gray-600 font-semibold">Welcome to Road Bed</h4>

@@ -3,10 +3,12 @@ package com.kaankaplan.road_bed.controllers;
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
 import com.kaankaplan.road_bed.entities.House;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -41,8 +43,17 @@ public class HouseController {
 
     @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
     @PostMapping(path="save")
-    public House saveHouse(@RequestPart("house") House house, @RequestPart("multipartFile") List<MultipartFile> multipartFileList){
+    public House saveHouse(@RequestPart("house") House house,
+                           @RequestPart("multipartFile") List<MultipartFile> multipartFileList){
 
         return houseService.save(house, multipartFileList);
+    }
+
+    @GetMapping("getByCityNameAndEmptyDate/{cityName}")
+    public List<House> getHousesByCityAndEmptyDates(@PathVariable String cityName,
+                                                    @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                    @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
+
+        return houseService.getHousesByCityAndEmptyDates(cityName, startDate, endDate);
     }
 }

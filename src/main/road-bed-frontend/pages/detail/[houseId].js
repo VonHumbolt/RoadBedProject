@@ -13,12 +13,22 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
   const [isFavorite, setIsFavorite] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
+  const [selectedDayCount, setSelectedDayCount] = useState(1)
 
   const selectionRange = {
     startDate: startDate,
     endDate: endDate,
     key: "selection",
   };
+
+  const handleSelectDate = (ranges) => {
+    setStartDate(ranges.selection.startDate)
+    setEndDate(ranges.selection.endDate)
+
+    let difference = ranges.selection.endDate.getTime() - ranges.selection.startDate.getTime();
+    let day = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+    setSelectedDayCount(day);
+  }
 
   const closeModal = () => {
     setIsOpen(false)
@@ -96,7 +106,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
           <div className="space-y-2 mt-6 sm:mt-0 ">
             <div className="bg-white p-6 rounded-lg shadow-md w-2/3 mx-auto">
               <div className="flex items-center justify-between">
-                <p className="text-gray-500">Small Description</p>
+                <p className="text-gray-500">{house.description}</p>
                 <HeartIcon
                   className="h-6 w-6 cursor-pointer transform transition-all ease-in-out
                   hover:animate-bounce"
@@ -122,8 +132,8 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               <p className="text-gray-800 font-semibold pt-1 pb-2 px-1">Cost</p>
               <div className="border border-1 border-gray-200 my-1" />
               <div className="flex justify-between items-center space-y-1 pt-2 px-1">
-                <p className="text-gray-500">2 x {house.price}₺</p>
-                <p className="text-gray-500 font-semibold">1200₺</p>
+                <p className="text-gray-500">{selectedDayCount} x {house.price}₺</p>
+                <p className="text-gray-500 font-semibold">{selectedDayCount * house.price}₺</p>
               </div>
               <div className="flex justify-between items-center space-y-1 pb-2 px-1">
                 <p className="text-gray-500">Fee</p>
@@ -132,7 +142,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               <div className="border border-1 border-gray-200 my-1" />
               <div className="flex justify-between px-1 items-center pt-2">
                 <p className="font-semibold">Total Amount</p>
-                <p className="font-bold text-lg">1300₺</p>
+                <p className="font-bold text-lg">{selectedDayCount * house.price + 100}₺</p>
               </div>
               <div className="text-center mt-6">
                 <button
@@ -152,7 +162,9 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               minDate={new Date()}
               rangeColors={["#14B8A5"]}
               months={2}
+              disabledDates={house.reservedDates.map(d => new Date(d))}
               direction="horizontal"
+              onChange={handleSelectDate}
             />
           </div>
           <div className="sm:hidden text-center">
@@ -160,7 +172,9 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               ranges={[selectionRange]}
               minDate={new Date()}
               rangeColors={["#14B8A5"]}
+              disabledDates={house.reservedDates.map(d => new Date(d))}
               direction="horizontal"
+              onChange={handleSelectDate}
             />
           </div>
         </div>
@@ -188,6 +202,8 @@ export async function getServerSideProps(context) {
   let firstImage = house.imageUrlList[0];
   let secondImage = house.imageUrlList[1] ? house.imageUrlList[1] : null;
   let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2] : null;
+
+  console.log(house)
 
   return {
     props: {

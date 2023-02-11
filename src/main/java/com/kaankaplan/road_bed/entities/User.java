@@ -14,7 +14,6 @@ public class User implements Serializable {
     @Id
     private String userId;
 
-    @Indexed(unique = true)
     public String email;
 
     public String fullName;

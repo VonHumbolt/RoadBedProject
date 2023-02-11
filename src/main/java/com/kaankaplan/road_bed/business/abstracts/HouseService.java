@@ -3,6 +3,7 @@ package com.kaankaplan.road_bed.business.abstracts;
 import com.kaankaplan.road_bed.entities.House;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.Date;
 import java.util.List;
 
 public interface HouseService {
@@ -16,4 +17,6 @@ public interface HouseService {
     List<House> getHousesByCityName(String cityName);
 
     House getHouseByHouseId(String houseId);
+
+    List<House> getHousesByCityAndEmptyDates(String cityName, Date startDate, Date endDate);
 }

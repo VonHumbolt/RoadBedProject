@@ -2,60 +2,9 @@ import Footer from '@/components/Footer'
 import Header from '@/components/Header'
 import SearchedHouseCard from '@/components/SearchedHouseCard';
 import { format } from 'date-fns';
-import { useRouter } from 'next/router'
 import React from 'react'
 
-const houses=[
-  {
-    houseId: '63dbd3fe45999674422d3e9e',
-    capacity: 3,
-    imageUrlList: [
-      'http://res.cloudinary.com/dspea8wm4/image/upload/v1675351037/x9zcf6svoep9ocxmrunw.webp',
-      'http://res.cloudinary.com/dspea8wm4/image/upload/v1675351038/wmatvzt0k1uo1vs9nnaa.webp'
-    ],
-    price: 600,
-    category: {
-      categoryId: '63da626d877fdc122e435912',
-      categoryName: 'Small Flat',
-      categoryImageUrl: 'https://res.cloudinary.com/dspea8wm4/image/upload/v1675256307/small_flat_jhnrhu.jpg'
-    },
-    city: {
-      cityId: '63d8f811885b136bbeaf2acb',
-      cityName: 'Çanakkale',
-      cityImageUrl: 'https://pbs.twimg.com/media/DPU5bdZXkAEBm2X.jpg'
-    },
-    address: 'Barbaros Mah, Plaj Sk, Gülsüm Apt, No:8'
-  },
-  {
-    houseId: '63df7e15b0f91a27568bcc2c',
-    capacity: 5,
-    imageUrlList: [
-      'http://res.cloudinary.com/dspea8wm4/image/upload/v1675591186/nafxfsrakjz8ff2fuytv.webp',
-      'http://res.cloudinary.com/dspea8wm4/image/upload/v1675591187/wazdjhxrzjhg79yuryry.webp',
-      'http://res.cloudinary.com/dspea8wm4/image/upload/v1675591188/vghdggunb8ii8qtyaazu.webp'
-    ],
-    price: 1200,
-    category: {
-      categoryId: '63da626d877fdc122e435912',
-      categoryName: 'Small Flat',
-      categoryImageUrl: 'https://res.cloudinary.com/dspea8wm4/image/upload/v1675256307/small_flat_jhnrhu.jpg'
-    },
-    city: {
-      cityId: '63d8f81c885b136bbeaf2acc',
-      cityName: 'Eskişehir',
-      cityImageUrl: 'https://www.bizevdeyokuz.com/wp-content/uploads/Eskisehir-porsuk-cayi-tekne-1280x720.jpg'
-    },
-    address: 'Büyükerşen Bulvarı, Atatürk Sk, No: 2'
-  }
-]
-
-function Search() {
-
-    const router = useRouter();
-
-    const {city, startDate, endDate} = router.query
-    const formattedStartDate = format(new Date(startDate), "dd MMMM yy");
-    const formattedEndDate = format(new Date(endDate), "dd MMMM yy");
+function Search({city, formattedStartDate, formattedEndDate, houses}) {
 
   return (
     <div>
@@ -74,11 +23,29 @@ function Search() {
             ))}
 
         </div>
-        
-
+      
         <Footer />
     </div>
   )
+}
+
+export async function getServerSideProps(context) {
+
+  const {city, startDate, endDate} = context.query
+  const formattedStartDate = format(new Date(startDate), "dd MMMM yy");
+  const formattedEndDate = format(new Date(endDate), "dd MMMM yy");
+
+  const houses = await fetch(`http://localhost:8080/houses/getByCityNameAndEmptyDate/${city}?start=${format(new Date(startDate), "yyyy-MM-dd")}&end=${format(new Date(endDate), "yyyy-MM-dd")}`)
+    .then((res) => res.json());
+
+  return {
+    props: {
+      city,
+      formattedStartDate,
+      formattedEndDate,
+      houses
+    }
+  };
 }
 
 export default Search

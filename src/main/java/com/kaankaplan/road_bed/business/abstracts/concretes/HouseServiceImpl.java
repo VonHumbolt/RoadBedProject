@@ -12,9 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @Service
 public class HouseServiceImpl implements HouseService {
@@ -49,6 +47,30 @@ public class HouseServiceImpl implements HouseService {
         return houseRepository.findHouseByHouseId(houseId);
     }
 
+    @Override
+    public List<House> getHousesByCityAndEmptyDates(String cityName, Date startDate, Date endDate) {
+        List<House> houses = houseRepository.
+                findHousesByCity_CityName(
+                        cityName
+                );
+
+        List<House> newHouses = new ArrayList<>();
+
+        houses.forEach(house -> {
+            for (int i=0; i< house.reservedDates.size(); i++) {
+                if (startDate.compareTo( house.reservedDates.get(i)) < 0 && endDate.compareTo(house.reservedDates.get(i)) < 0){
+                    newHouses.add(house);
+                    break;
+                }
+                else if (startDate.compareTo(house.reservedDates.get(i)) > 0 && endDate.compareTo(house.reservedDates.get(i)) > 0){
+                    newHouses.add(house);
+                    break;
+                }
+            }
+        });
+        return newHouses;
+    }
+
     @CacheEvict(value = "houses", allEntries = true)
     @ToLog
     @Transactional
@@ -62,6 +84,8 @@ public class HouseServiceImpl implements HouseService {
             String imageUrl = (String) uploadResults.get("url");
             houseImages.add(imageUrl);
         });
+        // HERE: add house owner;
+
 
         house.imageUrlList = houseImages;
 

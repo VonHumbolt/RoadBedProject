@@ -4,6 +4,8 @@ import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
@@ -19,8 +21,12 @@ public class House implements Serializable {
 
     public Float price;
 
+    public String description;
+
     public Category category;
 
+    public User owner;
+    public List<Date> reservedDates = new ArrayList<>();
     public City city;
 
     public String address;
