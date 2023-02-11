@@ -50,6 +50,7 @@ public class SecurityConfig {
                 .requestMatchers(HttpMethod.GET,  "/cities/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/categories/**").permitAll()
                 .requestMatchers(HttpMethod.GET,  "/houses/**").permitAll()
+                .requestMatchers(HttpMethod.GET,  "/users/**").permitAll()
                 .requestMatchers(HttpMethod.POST,  "/cities/**").permitAll()
                 .requestMatchers(HttpMethod.POST,  "/roles/**").permitAll()
                 .anyRequest().authenticated();

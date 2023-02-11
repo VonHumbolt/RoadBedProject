@@ -9,6 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "@badrap/bar-of-progress": "^0.2.2",
     "@headlessui/react": "^1.7.8",
     "@heroicons/react": "^1.0.6",
     "@next/font": "13.1.4",

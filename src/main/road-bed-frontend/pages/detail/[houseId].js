@@ -98,7 +98,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                 />
                 <p className="pl-2 text-gray-600">Your Host: </p>
 
-                <p className="pl-2 text-gray-600 font-semibold">Kaan Kaplan</p>
+                <p className="pl-2 text-gray-600 font-semibold">{house.owner.fullName}</p>
               </div>
             </div>
           </div>

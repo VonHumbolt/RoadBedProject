@@ -2,8 +2,9 @@ import Header from "@/components/Header";
 import ImageDialog from "@/components/ImageDialog";
 import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
+import UserService from "@/services/userService";
 import { PlusCircleIcon } from "@heroicons/react/solid";
-import React, { useRef, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
@@ -11,6 +12,7 @@ function Create({ cities, categories }) {
   const user = useSelector(userFromRedux);
 
   const houseService = new HouseService();
+  const userService = new UserService();
 
   const [selectedImageFiles, setSelectedImageFiles] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
@@ -19,10 +21,15 @@ function Create({ cities, categories }) {
   const [selectedImageForDetail, setSelectedImageForDetail] = useState();
   const [firstImage, setFirstImage] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [userInfo, setUserInfo] = useState({})
 
   const fileRef = useRef(null);
   const formBtnRef = useRef(null);
 
+  useEffect(() => {
+    userService.getByEmail(user.email).then(res => setUserInfo(res.data))
+  }, [])
+  
   const {
     register,
     handleSubmit,
@@ -40,6 +47,7 @@ function Create({ cities, categories }) {
       description: data.description,
       city: selectedCity,
       category: selectedCategory,
+      owner: userInfo
     };
 
     const json = JSON.stringify(house);
@@ -306,6 +314,7 @@ function Create({ cities, categories }) {
 }
 
 export async function getServerSideProps() {
+
   const cities = await fetch("http://localhost:8080/cities/getall").then(
     (res) => res.json()
   );
@@ -313,6 +322,7 @@ export async function getServerSideProps() {
   const categories = await fetch(
     "http://localhost:8080/categories/getall"
   ).then((res) => res.json());
+
 
   return {
     props: {
