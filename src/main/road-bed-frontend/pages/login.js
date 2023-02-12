@@ -43,33 +43,38 @@ function Login() {
           <h4 className="py-16 text-lg text-gray-600 font-semibold">Welcome to Road Bed</h4>
 
           <form className="w-full md:w-[500px]  px-16" onSubmit={handleSubmit(onSubmit)}>
-            <div className="flex flex-col space-y-2">
-              <label className="px-1 text-sm text-gray-500">Email</label>
+            <div className="flex flex-col space-y-1">
+              <label className="px-1 text-sm text-gray-500">Email address</label>
               <input
                 {...register("email", {
                   required: "Please enter an email.",
                 })}
                 className="formInput"
                 type="email"
-                placeholder="Email address"
+                placeholder="example@example.com"
               />
               <p className="text-[#ed6172] font-semibold px-2 text-start">
                 {errors.email?.message}
               </p>
-              <label className="px-1 text-sm text-gray-500">Password</label>
+              <label className="px-1 pt-1 text-sm text-gray-500">Password</label>
               <input
                 {...register("password", {
                   required: "Please enter your password.",
                 })}
                 className="formInput"
                 type="password"
-                placeholder="Password"
+                placeholder="Your password"
               />
               <p className="text-[#ed6172] font-semibold px-2 text-start">
                 {errors.password?.message}
               </p>
             </div>
-            <p className="pt-4 pb-1 text-center text-gray-500">You don't have an account? </p>
+            <div className="text-center pt-6 pb-1 ">
+              <button className="formButton" type="submit">
+                Login
+              </button>
+            </div>
+            <p className="pt-6 pb-1 text-center text-gray-500">You don't have an account? </p>
             <p className="mb-2 text-center">
               <Link href="/register">
                 <span className="font-semibold underline decoration-2 decoration-teal-600 cursor-pointer">
@@ -77,11 +82,6 @@ function Login() {
                 </span>
               </Link>
             </p>
-            <div className="text-center">
-              <button className="formButton mt-6" type="submit">
-                Login
-              </button>
-            </div>
           </form>
         </div>
       </div>

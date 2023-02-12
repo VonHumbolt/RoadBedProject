@@ -57,7 +57,7 @@ function Header({searchQuery}) {
             </h3>
           </div>
         </Link>
-        <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm">
+        <div className="flex items-center md:border-2 rounded-full py-2 md:shadow-sm ">
           <input
             className="flex-grow outline-none bg-transparent pl-5 text-sm text-gray-600
               placeholder-gray-400"
