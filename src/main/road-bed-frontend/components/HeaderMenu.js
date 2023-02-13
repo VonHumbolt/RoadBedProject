@@ -1,4 +1,5 @@
 import { remove } from "@/redux/userSlice";
+import { signOut } from "next-auth/react";
 import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -57,6 +58,7 @@ function HeaderMenu({ isLoggedIn }) {
                         transition duration-100 ease-out text-start"
                         onClick={() => {
                             dispatch(remove())
+                            signOut()
                         }}
                 >
                     Logout

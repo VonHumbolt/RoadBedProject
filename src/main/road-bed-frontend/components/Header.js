@@ -9,9 +9,11 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css"; 
 import { DateRange } from "react-date-range";
 import { useRouter } from "next/router";
+import { signIn, useSession } from "next-auth/react";
 
 function Header({searchQuery}) {
   const user = useSelector(userFromRedux);
+  const {data: session} = useSession()
 
   const router = useRouter();
 
@@ -71,12 +73,15 @@ function Header({searchQuery}) {
           />
         </div>
 
-        <div className="flex items-center space-x-4">
-          <Link href="/login">
-            <p className="text-gray-500 cursor-pointer hidden sm:inline-block">
-              Become a Host
-            </p>
-          </Link>
+        <div className="flex items-center space-x-4"> {console.log(session)}
+          {!session && (
+            // <Link href="/login">
+              <p className="text-gray-500 cursor-pointer hidden sm:inline-block"
+              onClick={() => signIn()}>
+                Become a Host
+              </p>
+            // </Link>
+          )}
           <div className="relative">
             <div
               className="flex items-center space-x-2 border-2 border-gray-200 rounded-full px-2
@@ -88,7 +93,7 @@ function Header({searchQuery}) {
             </div>
 
             {isMenuOpen ? (
-              <HeaderMenu isLoggedIn={user.accessToken === undefined} />
+              <HeaderMenu isLoggedIn={session === null} />
             ) : null}
           </div>
         </div>

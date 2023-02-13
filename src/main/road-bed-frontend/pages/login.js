@@ -1,6 +1,7 @@
 import Header from "@/components/Header";
 import { save } from "@/redux/userSlice";
 import AuthService from "@/services/authService";
+import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
@@ -16,10 +17,16 @@ function Login() {
     handleSubmit,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => {
-    authService.login(data).then((result) => {
-      dispatch(save(result.data));
-    });
+  const onSubmit = async (data) => {
+    // authService.login(data).then((result) => {
+    //   dispatch(save(result.data));
+    // });
+    await signIn("credentials", {
+      email: data.email,
+      password: data.password,
+      redirect: true,
+      callbackUrl: "/"
+    })
   };
 
   return (
