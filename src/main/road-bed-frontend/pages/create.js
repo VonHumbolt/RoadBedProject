@@ -4,12 +4,14 @@ import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
 import UserService from "@/services/userService";
 import { PlusCircleIcon } from "@heroicons/react/solid";
+import { useSession } from "next-auth/react";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 function Create({ cities, categories }) {
-  const user = useSelector(userFromRedux);
+  // const user = useSelector(userFromRedux);
+  const {data: session} = useSession();
 
   const houseService = new HouseService();
   const userService = new UserService();
@@ -21,15 +23,17 @@ function Create({ cities, categories }) {
   const [selectedImageForDetail, setSelectedImageForDetail] = useState();
   const [firstImage, setFirstImage] = useState();
   const [isOpen, setIsOpen] = useState(false);
+  const [user, setUser] = useState({})
   const [userInfo, setUserInfo] = useState({})
 
   const fileRef = useRef(null);
   const formBtnRef = useRef(null);
 
   useEffect(() => {
-    userService.getByEmail(user.email).then(res => setUserInfo(res.data))
+    setUser(session?.token?.token?.user)
+    userService.getByEmail(session?.token?.token?.user?.email).then(res => setUserInfo(res.data))
   }, [])
-  
+
   const {
     register,
     handleSubmit,
@@ -58,7 +62,6 @@ function Create({ cities, categories }) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-
     houseService.save(formData, user?.accessToken);
   };
 

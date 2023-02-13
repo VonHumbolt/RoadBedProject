@@ -45,7 +45,7 @@ export default function Home({houses, categories}) {
         <Categories categories={categories} />
       </section>
       
-      <section className="">
+      <section>
         <Houses houses={houses} />
       </section>
 

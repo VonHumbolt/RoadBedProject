@@ -73,14 +73,13 @@ function Header({searchQuery}) {
           />
         </div>
 
-        <div className="flex items-center space-x-4"> {console.log(session)}
+        <div className="flex items-center space-x-4">
           {!session && (
-            // <Link href="/login">
-              <p className="text-gray-500 cursor-pointer hidden sm:inline-block"
-              onClick={() => signIn()}>
+            <Link href="/register">
+              <p className="text-gray-500 cursor-pointer hidden sm:inline-block">
                 Become a Host
               </p>
-            // </Link>
+            </Link>
           )}
           <div className="relative">
             <div
