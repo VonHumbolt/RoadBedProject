@@ -1,5 +1,7 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
+import com.kaankaplan.road_bed.entities.City;
+import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.Role;
 import com.kaankaplan.road_bed.entities.User;
 import com.kaankaplan.road_bed.repositories.UserRepository;
@@ -11,14 +13,15 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.never;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)
 class UserServiceImplTest {
@@ -75,7 +78,33 @@ class UserServiceImplTest {
         userServiceImpl.loadUserByUsername(email);
 
         verify(userRepository).findUserByEmail(email);
+    }
 
+    @Test
+    void shouldAddHouseToFavorite() {
+        String userId = "userId";
+        User user = new User("kaankaplan@gmail.com", "Kaan Kaplan", "1234", new Role("TENANT"));
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        userServiceImpl.addHouseToFavorites(userId, new House());
+
+        verify(userRepository).save(user);
+    }
+
+    @Test
+    void shouldNotRemoveHouseFromFavoritesWhenHouseIsNotExistsInFavorites() {
+        String userId = "userId";
+        User user = new User("kaankaplan@gmail.com", "Kaan Kaplan", "1234", new Role("TENANT"));
+        House house = new House();
+
+        given(userRepository.findById(userId)).willReturn(Optional.of(user));
+
+        assertThatThrownBy(() -> userServiceImpl.removeHouseFromFavorites(userId, house))
+                .isInstanceOf(RuntimeException.class)
+                        .hasMessageContaining("House is not find in favorites");
+
+        verify(userRepository, never()).save(any());
     }
 
     @Test

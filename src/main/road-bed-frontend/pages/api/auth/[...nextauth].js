@@ -35,15 +35,19 @@ export const authOptions = {
     strategy: "jwt"
   },
   callbacks:{
-    async jwt(token, user, account, profile, isNewUser) {
+    async jwt(token, user) { //, account, profile, isNewUser
 
-      if (user?.accessToken) {
-        token.token = user.accessToken;
-      }
-      return token;
+      // if (user?.accessToken) {
+      //   token.token = user.accessToken;
+      // }
+      // return token;
+
+      return ({...token, ...user})
     },
 
-    async session(session, token) {
+    async session(session, token, user) {
+      // return session;
+      session.user = token;
       return session;
     }
   },

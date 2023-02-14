@@ -6,6 +6,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 
 @Document(collection = "users")
@@ -19,6 +21,8 @@ public class User implements Serializable {
     public String fullName;
 
     public String password;
+
+    public List<House> favoriteHouses = new ArrayList<>();
 
     @Field
     public Role role;

@@ -1,6 +1,7 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
 import com.kaankaplan.road_bed.business.abstracts.UserService;
+import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.User;
 import com.kaankaplan.road_bed.repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class UserServiceImpl implements UserService, UserDetailsService {
@@ -42,6 +44,28 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     @Override
     public User findUserByEmail(String email) {
         return userRepository.findUserByEmail(email).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+    }
+
+    @Override
+    public void addHouseToFavorites(String userId, House house) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        user.favoriteHouses.add(house);
+        userRepository.save(user);
+    }
+
+    @Override
+    public void removeHouseFromFavorites(String userId, House house) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
+
+        boolean isHouseInFavorites = user.favoriteHouses.stream().anyMatch(h -> h.getHouseId() == house.getHouseId());
+
+        if (!isHouseInFavorites) {
+            throw new RuntimeException("House is not find in favorites");
+        }
+        List<House> houses = user.favoriteHouses.stream().filter(h -> h.getHouseId() != house.getHouseId()).toList();
+        user.favoriteHouses = houses;
+        userRepository.save(user);
     }
 
     @Override

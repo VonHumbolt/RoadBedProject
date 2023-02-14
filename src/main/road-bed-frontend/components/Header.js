@@ -9,12 +9,12 @@ import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css"; 
 import { DateRange } from "react-date-range";
 import { useRouter } from "next/router";
-import { signIn, useSession } from "next-auth/react";
+import { useSession } from "next-auth/react";
 
 function Header({searchQuery}) {
   const user = useSelector(userFromRedux);
   const {data: session} = useSession()
-
+  console.log(session)
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
