@@ -9,7 +9,8 @@ const nextConfig = {
       "izmir.ktb.gov.tr",
       "img.freepik.com",
       "res.cloudinary.com",
-      "cdn.londonandpartners.com"
+      "cdn.londonandpartners.com",
+      "images.pexels.com"
     ]
   }
 }
