@@ -11,8 +11,6 @@ public class Tenant extends User{
     @Field
     public List<House> visitedHouses;
 
-    @Field
-    public List<House> favoriteHouses;
 
     public Tenant() { }
 }

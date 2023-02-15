@@ -10,7 +10,7 @@ function Category({ houses }) {
       <div className="max-w-7xl mx-auto ">
         <h3 className="text-xl mt-12 px-8 font-semibold">
           {houses[0]?.category.categoryName} Houses{" "}
-          <span className="text-gray-500 text-sm"> · 100+ Stays </span>
+          <span className="text-gray-500 text-sm"> · {houses.length > 10 ? "10+" : houses.length} Stays </span>
         </h3>
         <div className="border-b border-gray-300 mx-8 mt-2" />
 

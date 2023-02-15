@@ -14,7 +14,7 @@ import { useSession } from "next-auth/react";
 function Header({searchQuery}) {
   const user = useSelector(userFromRedux);
   const {data: session} = useSession()
-  console.log(session)
+
   const router = useRouter();
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);

@@ -19,7 +19,7 @@ function SmallCard({ img, name }) {
             rounded-xl group-hover:bg-teal-300 group-hover:opacity-90 
             transiton duration-100 ease-out"
         >
-          <h2 className="hidden group-hover:inline text-xl font-bold ">
+          <h2 className="hidden group-hover:inline text-md sm:text-xl font-bold ">
             {""}
             {name}{" "}
           </h2>

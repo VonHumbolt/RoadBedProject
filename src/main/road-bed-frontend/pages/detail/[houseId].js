@@ -1,19 +1,24 @@
 import Header from "@/components/Header";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { DateRange } from "react-date-range";
 import ImageDialog from "@/components/ImageDialog";
+import UserService from "@/services/userService";
+import { useSession } from "next-auth/react";
 
 function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
+  const userService = new UserService();
+  const { data: session } = useSession();
 
-    const [isOpen, setIsOpen] = useState(false)
-    const [selectedImage, setSelectedImage] = useState()
+  const [isOpen, setIsOpen] = useState(false);
+  const [selectedImage, setSelectedImage] = useState();
 
   const [isFavorite, setIsFavorite] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
-  const [selectedDayCount, setSelectedDayCount] = useState(1)
+  const [selectedDayCount, setSelectedDayCount] = useState(1);
+  const [user, setUser] = useState({})
 
   const selectionRange = {
     startDate: startDate,
@@ -21,23 +26,63 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
     key: "selection",
   };
 
-  const handleSelectDate = (ranges) => {
-    setStartDate(ranges.selection.startDate)
-    setEndDate(ranges.selection.endDate)
+  useEffect(() => {
+    getInitialData();
+  }, [])
+  
+  const getInitialData = async () => {
+    await userService.getByEmail(session?.user?.email).then(res => {
+      const userInfo = res.data
+      let isHouseFavorite = userInfo.favoriteHouses?.some(h => h.houseId === house.houseId);
 
-    let difference = ranges.selection.endDate.getTime() - ranges.selection.startDate.getTime();
+      setUser(userInfo)
+      setIsFavorite(isHouseFavorite)
+    });
+    
+  }
+
+  const handleSelectDate = (ranges) => {
+    setStartDate(ranges.selection.startDate);
+    setEndDate(ranges.selection.endDate);
+
+    let difference =
+      ranges.selection.endDate.getTime() - ranges.selection.startDate.getTime();
     let day = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
     setSelectedDayCount(day);
-  }
+  };
 
   const closeModal = () => {
-    setIsOpen(false)
-  }
+    setIsOpen(false);
+  };
 
   const handleSelectImage = (image) => {
-    setIsOpen(true)
-    setSelectedImage(image)
-  }
+    setIsOpen(true);
+    setSelectedImage(image);
+  };
+
+  const handleFavoriteHouseIcon = () => {
+    if (!isFavorite) {
+      userService
+        .addHouseToFavorites(
+          user?.userId,
+          house,
+          session?.accessToken
+        )
+        .then((res) => {
+          if (res.status === 200) setIsFavorite(true);
+        });
+    } else {
+      userService
+        .removeHouseFromFavorites(
+          user?.userId,
+          house,
+          session?.accessToken
+        )
+        .then((res) => {
+          if (res.status === 200) setIsFavorite(false);
+        });
+    }
+  };
 
   return (
     <div className="pb-10">
@@ -96,9 +141,11 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                   width={100}
                   height={100}
                 />
-                <p className="pl-2 text-gray-600">Your Host: </p>
+                <p className="pl-2 text-gray-600 text-lg ">Your Host: </p>
 
-                <p className="pl-2 text-gray-600 font-semibold">{house.owner.fullName}</p>
+                <p className="pl-2 text-gray-600 text-lg font-semibold">
+                  {house.owner.fullName}
+                </p>
               </div>
             </div>
           </div>
@@ -112,7 +159,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                   hover:animate-bounce"
                   color="#14B8A5"
                   fill={`${isFavorite === false ? "#fff" : "#14b8a5"}`}
-                  onClick={() => setIsFavorite(!isFavorite)}
+                  onClick={() => handleFavoriteHouseIcon()}
                 />
               </div>
               <div className="border border-1 border-teal-500 w-fit px-1 mt-1 rounded-lg">
@@ -132,8 +179,12 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               <p className="text-gray-800 font-semibold pt-1 pb-2 px-1">Cost</p>
               <div className="border border-1 border-gray-200 my-1" />
               <div className="flex justify-between items-center space-y-1 pt-2 px-1">
-                <p className="text-gray-500">{selectedDayCount} x {house.price}₺</p>
-                <p className="text-gray-500 font-semibold">{selectedDayCount * house.price}₺</p>
+                <p className="text-gray-500">
+                  {selectedDayCount} x {house.price}₺
+                </p>
+                <p className="text-gray-500 font-semibold">
+                  {selectedDayCount * house.price}₺
+                </p>
               </div>
               <div className="flex justify-between items-center space-y-1 pb-2 px-1">
                 <p className="text-gray-500">Fee</p>
@@ -142,12 +193,15 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               <div className="border border-1 border-gray-200 my-1" />
               <div className="flex justify-between px-1 items-center pt-2">
                 <p className="font-semibold">Total Amount</p>
-                <p className="font-bold text-lg">{selectedDayCount * house.price + 100}₺</p>
+                <p className="font-bold text-lg">
+                  {selectedDayCount * house.price + 100}₺
+                </p>
               </div>
               <div className="text-center mt-6">
                 <button
                   className="mx-auto px-4 py-1 rounded-lg font-bold bg-teal-500 shadow-md
-                    hover:scale-105 hover:shadow-lg transform transition-all duration-200 ease-in-out"
+                    hover:scale-105 hover:shadow-lg transform transition-all duration-200 ease-in-out
+                    text-gray-50"
                 >
                   Reserve
                 </button>
@@ -162,7 +216,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               minDate={new Date()}
               rangeColors={["#14B8A5"]}
               months={2}
-              disabledDates={house.reservedDates.map(d => new Date(d))}
+              disabledDates={house.reservedDates.map((d) => new Date(d))}
               direction="horizontal"
               onChange={handleSelectDate}
             />
@@ -172,7 +226,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
               ranges={[selectionRange]}
               minDate={new Date()}
               rangeColors={["#14B8A5"]}
-              disabledDates={house.reservedDates.map(d => new Date(d))}
+              disabledDates={house.reservedDates.map((d) => new Date(d))}
               direction="horizontal"
               onChange={handleSelectDate}
             />
@@ -203,7 +257,7 @@ export async function getServerSideProps(context) {
   let secondImage = house.imageUrlList[1] ? house.imageUrlList[1] : null;
   let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2] : null;
 
-  console.log(house)
+  console.log(house);
 
   return {
     props: {

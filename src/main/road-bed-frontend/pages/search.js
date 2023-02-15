@@ -12,7 +12,7 @@ function Search({city, formattedStartDate, formattedEndDate, houses}) {
 
         <div className='max-w-7xl h-screen mx-auto px-8'>
 
-            <h4 className='text-gray-500 text-md mt-10'>100+ Houses · {formattedStartDate} - {formattedEndDate} · 3 guests </h4>
+            <h4 className='text-gray-500 text-md mt-10'>{houses.length > 10 ? "10+" : houses.length} Houses · {formattedStartDate} - {formattedEndDate} · 3 guests </h4>
             <h2 className='text-xl font-semibold mt-4'>Houses in {city}</h2>
 
             <div className='border-b border-gray-300 mt-2' />

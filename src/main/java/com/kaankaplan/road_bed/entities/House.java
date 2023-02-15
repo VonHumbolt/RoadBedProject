@@ -44,4 +44,5 @@ public class House implements Serializable {
     public String getHouseId() {
         return houseId;
     }
+
 }

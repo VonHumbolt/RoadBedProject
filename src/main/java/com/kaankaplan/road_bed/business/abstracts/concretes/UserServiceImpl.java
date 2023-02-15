@@ -14,6 +14,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -58,13 +59,13 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     public void removeHouseFromFavorites(String userId, House house) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 
-        boolean isHouseInFavorites = user.favoriteHouses.stream().anyMatch(h -> h.getHouseId() == house.getHouseId());
+        boolean isHouseInFavorites = user.favoriteHouses.stream().anyMatch(h -> h.getHouseId().equals(house.getHouseId()));
 
         if (!isHouseInFavorites) {
             throw new RuntimeException("House is not find in favorites");
         }
-        List<House> houses = user.favoriteHouses.stream().filter(h -> h.getHouseId() != house.getHouseId()).toList();
-        user.favoriteHouses = houses;
+
+        user.favoriteHouses = user.favoriteHouses.stream().filter(h -> !h.getHouseId().equals(house.getHouseId())).toList();
         userRepository.save(user);
     }
 

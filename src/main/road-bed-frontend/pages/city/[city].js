@@ -11,7 +11,7 @@ function City({houses}) {
 
         <div className='max-w-7xl mx-auto'>
             <h3 className='text-xl mt-12 px-8 font-semibold'> 
-            Houses in {houses[0].city.cityName} <span className='text-gray-500 text-sm'> · 100+ Stays </span>
+            Houses in {houses[0].city.cityName} <span className='text-gray-500 text-sm'> · {houses.length > 10 ? "10+" : houses.length} Stays </span>
             </h3>
             <div className='border-b border-gray-300 mx-8 mt-2' />
             <div className="py-10 px-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4">

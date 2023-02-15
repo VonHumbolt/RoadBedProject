@@ -23,17 +23,15 @@ function Create({ cities, categories }) {
   const [selectedImageForDetail, setSelectedImageForDetail] = useState();
   const [firstImage, setFirstImage] = useState();
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState({})
   const [userInfo, setUserInfo] = useState({})
 
   const fileRef = useRef(null);
   const formBtnRef = useRef(null);
 
   useEffect(() => {
-    setUser(session?.token?.token?.user)
-    userService.getByEmail(session?.token?.token?.user?.email).then(res => setUserInfo(res.data))
+    userService.getByEmail(session?.user?.email).then(res => setUserInfo(res.data))
   }, [])
-
+  
   const {
     register,
     handleSubmit,
@@ -62,7 +60,7 @@ function Create({ cities, categories }) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-    houseService.save(formData, user?.accessToken);
+    houseService.save(formData, session?.accessToken);
   };
 
   const selectImageUrl = (e) => {
