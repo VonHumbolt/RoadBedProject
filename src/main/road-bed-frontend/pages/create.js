@@ -5,13 +5,15 @@ import HouseService from "@/services/houseService";
 import UserService from "@/services/userService";
 import { PlusCircleIcon } from "@heroicons/react/solid";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 function Create({ cities, categories }) {
   // const user = useSelector(userFromRedux);
-  const {data: session} = useSession();
+  const { data: session } = useSession();
+  const router = useRouter();
 
   const houseService = new HouseService();
   const userService = new UserService();
@@ -23,15 +25,17 @@ function Create({ cities, categories }) {
   const [selectedImageForDetail, setSelectedImageForDetail] = useState();
   const [firstImage, setFirstImage] = useState();
   const [isOpen, setIsOpen] = useState(false);
-  const [userInfo, setUserInfo] = useState({})
+  const [userInfo, setUserInfo] = useState({});
 
   const fileRef = useRef(null);
   const formBtnRef = useRef(null);
 
   useEffect(() => {
-    userService.getByEmail(session?.user?.email).then(res => setUserInfo(res.data))
-  }, [])
-  
+    userService
+      .getByEmail(session?.user?.email)
+      .then((res) => setUserInfo(res.data));
+  }, []);
+
   const {
     register,
     handleSubmit,
@@ -49,7 +53,7 @@ function Create({ cities, categories }) {
       description: data.description,
       city: selectedCity,
       category: selectedCategory,
-      owner: userInfo
+      owner: userInfo,
     };
 
     const json = JSON.stringify(house);
@@ -60,7 +64,10 @@ function Create({ cities, categories }) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-    houseService.save(formData, session?.accessToken);
+    houseService.save(formData, session?.accessToken).then((res) => {
+      if(res.status === 200)
+        router.push("/detail/" + res.data.houseId);
+    });
   };
 
   const selectImageUrl = (e) => {
@@ -110,7 +117,9 @@ function Create({ cities, categories }) {
       <div className="max-w-7xl mx-auto my-4">
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div>
-            <h2 className="text-center text-3xl font-semibold mt-20">Save Your House</h2>
+            <h2 className="text-center text-3xl font-semibold mt-20">
+              Save Your House
+            </h2>
             <form
               className="flex flex-col mx-auto gap-2 w-fit mt-10 space-y-3"
               onSubmit={handleSubmit(onSubmit)}
@@ -233,22 +242,21 @@ function Create({ cities, categories }) {
                 Choose images of your house.
               </label>
 
-                <img
-                  src={
-                    firstImage ||
-                    "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="
+              <img
+                src={
+                  firstImage ||
+                  "https://media.istockphoto.com/id/1147544807/vector/thumbnail-image-vector-graphic.jpg?s=612x612&w=0&k=20&c=rnCKVbdxqkjlcs3xH87-9gocETqpspHFXu5dIGB4wuM="
+                }
+                className="w-96 h-52 object-cover mt-3 mx-auto sm:mx-0 cursor-pointer rounded-lg"
+                onClick={() => {
+                  if (firstImage) {
+                    setIsOpen(true);
+                    setSelectedImageForDetail(firstImage);
+                  } else {
+                    fileRef.current.click();
                   }
-                  className="w-96 h-52 object-cover mt-3 mx-auto sm:mx-0 cursor-pointer rounded-lg"
-                  onClick={() => {
-                    if(firstImage){
-                      setIsOpen(true);
-                      setSelectedImageForDetail(firstImage);
-                    } else {
-                      fileRef.current.click()
-                    }
-                  }}
-                />
-             
+                }}
+              />
 
               <PlusCircleIcon
                 className="w-10 absolute bottom-0 right-10 sm:right-0 sm:-bottom-2 md:right-6 lg:right-56
@@ -286,7 +294,6 @@ function Create({ cities, categories }) {
               >
                 Save
               </button>
-
             </div>
           </div>
         </div>
@@ -315,7 +322,6 @@ function Create({ cities, categories }) {
 }
 
 export async function getServerSideProps() {
-
   const cities = await fetch("http://localhost:8080/cities/getall").then(
     (res) => res.json()
   );
@@ -323,7 +329,6 @@ export async function getServerSideProps() {
   const categories = await fetch(
     "http://localhost:8080/categories/getall"
   ).then((res) => res.json());
-
 
   return {
     props: {

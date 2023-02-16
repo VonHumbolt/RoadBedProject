@@ -19,7 +19,6 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
     private final ImageUploadService imageUploadService;
-
     @Autowired
     public HouseServiceImpl(HouseRepository houseRepository, ImageUploadService imageUploadService) {
         this.houseRepository = houseRepository;
@@ -84,9 +83,6 @@ public class HouseServiceImpl implements HouseService {
             String imageUrl = (String) uploadResults.get("url");
             houseImages.add(imageUrl);
         });
-        // HERE: add house owner;
-
-
         house.imageUrlList = houseImages;
 
         return houseRepository.save(house);

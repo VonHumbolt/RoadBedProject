@@ -19,7 +19,7 @@ function Search({city, formattedStartDate, formattedEndDate, houses}) {
 
             {/* Map results */}
             {houses.map(house => (
-              <SearchedHouseCard key={house.houseId} house={house} />
+              <SearchedHouseCard key={house.houseId} house={house} favorited={false}/>
             ))}
 
         </div>

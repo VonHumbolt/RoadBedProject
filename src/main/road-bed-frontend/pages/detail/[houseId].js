@@ -34,7 +34,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
     await userService.getByEmail(session?.user?.email).then(res => {
       const userInfo = res.data
       let isHouseFavorite = userInfo.favoriteHouses?.some(h => h.houseId === house.houseId);
-
+      
       setUser(userInfo)
       setIsFavorite(isHouseFavorite)
     });
@@ -256,8 +256,6 @@ export async function getServerSideProps(context) {
   let firstImage = house.imageUrlList[0];
   let secondImage = house.imageUrlList[1] ? house.imageUrlList[1] : null;
   let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2] : null;
-
-  console.log(house);
 
   return {
     props: {

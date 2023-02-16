@@ -25,7 +25,7 @@ function Profile({ user }) {
           <div className="bg-gray-100 rounded-xl w-full mx-4 shadow-md">
             <div className="flex justify-between">
               <div className="flex flex-col justify-between px-4 py-2">
-                <p className="text-2xl font-semibold">Kaan Kaplan</p>
+                <p className="text-2xl font-semibold">{user.fullName}</p>
                 <div className="flex space-x-6">
                   <div
                     className="relative hover:scale-105 active:scale-90
@@ -64,7 +64,7 @@ function Profile({ user }) {
                       className="absolute -top-3 -right-5 px-2 py-1 bg-teal-500 text-xs text-white
                     font-semibold rounded-full"
                     >
-                      3
+                      {user.favoriteHouses.length > 9 ? "9+" : user.favoriteHouses.length}
                     </div>
                   </div>
                 </div>
@@ -72,7 +72,7 @@ function Profile({ user }) {
 
               <div className="py-2 pr-16">
                 <p className="text-xl">Contact</p>
-                <p className="text-lg text-gray-600">kaankaplan@gmail.com</p>
+                <p className="text-lg text-gray-600">{user.email}</p>
                 <p className="text-lg text-gray-600">0 542 434 32 34</p>
               </div>
             </div>
@@ -84,7 +84,7 @@ function Profile({ user }) {
           {activeTab === "myHouse" ? (
             <MyHouseComponent />
           ) : (
-            <MyFavoritesComponent />
+            <MyFavoritesComponent houses={user.favoriteHouses} />
           )}
         </div>
       </div>
@@ -92,17 +92,17 @@ function Profile({ user }) {
   );
 }
 
-// export async function getServerSideProps(context) {
-//     const {userId} = context.params;
+export async function getServerSideProps(context) {
+    const {userId} = context.params;
 
-//     const user = await fetch("http://localhost:8080/hosts/getById/" + userId)
-//         .then(res => res.json())
+    const user = await fetch("http://localhost:8080/users/getById/" + userId)
+        .then(res => res.json())
 
-//     return{
-//         props: {
-//             user
-//         }
-//     }
-// }
+    return{
+        props: {
+            user
+        }
+    }
+}
 
 export default Profile;

@@ -22,6 +22,11 @@ public class UserController {
         return userService.findUserByEmail(email);
     }
 
+    @GetMapping("getById/{userId}")
+    public User findUserById(@PathVariable String userId) {
+        return userService.findUserById(userId);
+    }
+
     @PostMapping("/addFavorite/{userId}")
     public void addHouseToFavorites(@PathVariable String userId, @RequestBody House house) {
         userService.addHouseToFavorites(userId, house);

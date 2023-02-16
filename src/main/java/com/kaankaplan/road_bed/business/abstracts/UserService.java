@@ -13,6 +13,8 @@ public interface UserService {
 
     User findUserByEmail(String email);
 
+    User findUserById(String userId);
+
     void addHouseToFavorites(String userId, House house);
 
     void removeHouseFromFavorites(String userId, House house);

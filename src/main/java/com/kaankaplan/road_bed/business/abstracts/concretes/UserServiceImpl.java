@@ -48,6 +48,11 @@ public class UserServiceImpl implements UserService, UserDetailsService {
     }
 
     @Override
+    public User findUserById(String userId) {
+        return userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User is not found"));
+    }
+
+    @Override
     public void addHouseToFavorites(String userId, House house) {
         User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
 

@@ -3,18 +3,18 @@ import React, { useState } from "react";
 import { HeartIcon } from "@heroicons/react/outline";
 import Link from "next/link";
 
-function SearchedHouseCard({ house }) {
-  const [isFavorite, setIsFavorite] = useState(false);
+function SearchedHouseCard({ house, favorited }) {
+  const [isFavorite, setIsFavorite] = useState(favorited);
 
   return (
     <Link href={"/detail/" + house.houseId}>
       <div
-        className="flex justify-between border-b border-gray-200 shadow-md rounded-lg my-2
+        className="flex justify-between border border-1 border-gray-200 shadow-md rounded-lg my-2
       hover:scale-105 transition-all transform duration-200 ease-in-out cursor-pointer"
       >
-        <div className="w-64 h-52 pt-3 hidden sm:inline">
+        <div className="w-64 h-52 px-3 hidden sm:flex justify-center items-center">
           <Image
-            className="object-contain rounded-lg"
+            className="object-cover rounded-lg"
             src={house.imageUrlList[0]}
             width={1200}
             height={900}
