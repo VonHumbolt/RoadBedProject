@@ -1,6 +1,7 @@
 package com.kaankaplan.road_bed.business.abstracts.concretes;
 
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
+import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.House;
@@ -19,10 +20,12 @@ public class HouseServiceImpl implements HouseService {
 
     private final HouseRepository houseRepository;
     private final ImageUploadService imageUploadService;
+    private final TenantService tenantService;
     @Autowired
-    public HouseServiceImpl(HouseRepository houseRepository, ImageUploadService imageUploadService) {
+    public HouseServiceImpl(HouseRepository houseRepository, ImageUploadService imageUploadService, TenantService tenantService) {
         this.houseRepository = houseRepository;
         this.imageUploadService = imageUploadService;
+        this.tenantService = tenantService;
     }
 
     @Cacheable(value = "houses")
@@ -84,6 +87,8 @@ public class HouseServiceImpl implements HouseService {
             houseImages.add(imageUrl);
         });
         house.imageUrlList = houseImages;
+
+        tenantService.addHouseToTenantsOwnHouse(house, house.owner.email);
 
         return houseRepository.save(house);
     }

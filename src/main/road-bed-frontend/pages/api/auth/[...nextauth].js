@@ -37,6 +37,7 @@ export const authOptions = {
   callbacks:{
     async jwt({token, user}) { 
       if(user) {
+        token.userId = user.userId
         token.accessToken = user.accessToken
         token.refreshToken = user.refreshToken
       }
@@ -45,6 +46,7 @@ export const authOptions = {
 
     async session({session, token}) {
       if(token) {
+        session.userId = token.userId
         session.accessToken = token.accessToken
         session.refreshToken = token.refreshToken
       }

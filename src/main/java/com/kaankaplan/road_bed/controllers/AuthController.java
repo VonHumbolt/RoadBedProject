@@ -44,10 +44,4 @@ public class AuthController {
     public LoginResponse refreshToken(@RequestBody RefreshRequest refreshRequest) {
         return authService.refreshToken(refreshRequest);
     }
-
-    @PreAuthorize("hasAnyRole('AUTHORITY_TENANT')")
-    @GetMapping("getget")
-    public String get() {
-        return "Getting";
-    }
 }

@@ -5,15 +5,16 @@ import Link from "next/link";
 import HeaderMenu from "./HeaderMenu";
 import { userFromRedux } from "@/redux/userSlice";
 import { useSelector } from "react-redux";
-import "react-date-range/dist/styles.css"; 
-import "react-date-range/dist/theme/default.css"; 
+import "react-date-range/dist/styles.css";
+import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
 import { useRouter } from "next/router";
 import { useSession } from "next-auth/react";
+import Image from "next/image";
 
-function Header({searchQuery}) {
+function Header({ searchQuery }) {
   const user = useSelector(userFromRedux);
-  const {data: session} = useSession()
+  const { data: session } = useSession();
 
   const router = useRouter();
 
@@ -43,17 +44,22 @@ function Header({searchQuery}) {
       query: {
         city: searchInput,
         startDate: startDate.toISOString(),
-        endDate: endDate.toISOString()
-      }
-    })
-  }
+        endDate: endDate.toISOString(),
+      },
+    });
+  };
 
   return (
     <header className="shadow-lg p-5 sticky top-0 bg-white z-20">
       <div className="max-w-7xl mx-auto flex flex-row justify-between items-center">
         <Link href="/">
           <div className="flex items-center space-x-2 cursor-pointer">
-            <img src="./road_icon.png" className="object-cover h-10 w-10" />
+            <Image
+              src="https://res.cloudinary.com/dspea8wm4/image/upload/v1676559288/road_icon_kh1xt5.png"
+              className="object-cover h-10 w-10"
+              width={1200}
+              height={900}
+            />
             <h3 className="text-lg font-bold text-teal-500 hidden md:inline-block">
               Road Bed
             </h3>
@@ -92,7 +98,10 @@ function Header({searchQuery}) {
             </div>
 
             {isMenuOpen ? (
-              <HeaderMenu isLoggedIn={session === null} />
+              <HeaderMenu
+                isLoggedIn={session === null}
+                userId={session?.userId}
+              />
             ) : null}
           </div>
         </div>

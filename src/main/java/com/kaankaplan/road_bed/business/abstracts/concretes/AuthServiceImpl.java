@@ -53,8 +53,10 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtProviderService.generateToken(principal);
         RefreshToken refreshToken = refreshTokenService.generateRefreshToken(loginRequest.email());
+        String userId = userService.findUserByEmail(loginRequest.email()).getUserId();
 
         return new LoginResponse(
+                userId,
                 principal.getUsername(),
                 token,
                 refreshToken.refreshToken
@@ -86,6 +88,6 @@ public class AuthServiceImpl implements AuthService {
 
         String newToken = jwtProviderService.generateTokenWithEmail(refreshRequest.email(), grantedAuthorities);
 
-        return new LoginResponse(refreshRequest.email(), newToken, refreshRequest.refreshToken());
+        return new LoginResponse(user.getUserId(), refreshRequest.email(), newToken, refreshRequest.refreshToken());
     }
 }

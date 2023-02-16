@@ -5,7 +5,7 @@ function MyFavoritesComponent({houses}) {
   return (
     <div>
 
-        <h2>My Favorite Houses · 10+ House</h2>
+        <h2>My Favorite Houses · {houses.length > 10 ? "10+" : houses.length} House</h2>
         <div className='border border-1 border-slate-300 my-1' />
         <div className='pt-2'>
           {houses.map(house => (

@@ -5,6 +5,7 @@ import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.business.abstracts.UserService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
+import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.Role;
 import com.kaankaplan.road_bed.entities.Tenant;
 import com.kaankaplan.road_bed.entities.User;
@@ -31,6 +32,11 @@ public class TenantServiceImpl implements TenantService {
         this.passwordEncoder = passwordEncoder;
     }
 
+    @Override
+    public Tenant getTenantByEmail(String email) {
+        return tenantRepository.findTenantByEmail(email);
+    }
+
     @ToLog
     @Transactional
     @Override
@@ -52,5 +58,14 @@ public class TenantServiceImpl implements TenantService {
         tenant.role = role;
 
         return tenantRepository.insert(tenant);
+    }
+
+    @Override
+    public void addHouseToTenantsOwnHouse(House house, String email) {
+        Tenant tenant = tenantRepository.findTenantByEmail(email);
+
+        tenant.ownHouses.add(house);
+
+        tenantRepository.save(tenant);
     }
 }

@@ -4,7 +4,7 @@ import Link from "next/link";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 
-function HeaderMenu({ isLoggedIn }) {
+function HeaderMenu({ isLoggedIn, userId }) {
 
     const dispatch = useDispatch();
 
@@ -44,7 +44,7 @@ function HeaderMenu({ isLoggedIn }) {
                     </p>
                 </Link>
                 <div className="border my-1" />
-                <Link href="/profile/63ee0194adf1fd652d729990">
+                <Link href={`/profile/${userId}`}>
                     <p
                     className="p-1 cursor-pointer hover:scale-105 hover:text-teal-400
                                 transition duration-100 ease-out text-start"
