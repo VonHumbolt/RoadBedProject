@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
-import { HeartIcon } from "@heroicons/react/outline";
+import { HeartIcon, WifiIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { DateRange } from "react-date-range";
 import ImageDialog from "@/components/ImageDialog";
@@ -31,13 +31,15 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
   }, [])
   
   const getInitialData = async () => {
-    await userService.getByEmail(session?.user?.email).then(res => {
-      const userInfo = res.data
-      let isHouseFavorite = userInfo.favoriteHouses?.some(h => h.houseId === house.houseId);
-      
-      setUser(userInfo)
-      setIsFavorite(isHouseFavorite)
-    });
+    if(session) {
+      await userService.getByEmail(session?.user?.email).then(res => {
+        const userInfo = res.data
+        let isHouseFavorite = userInfo.favoriteHouses?.some(h => h.houseId === house.houseId);
+        
+        setUser(userInfo)
+        setIsFavorite(isHouseFavorite)
+      });
+    }
     
   }
 
@@ -146,8 +148,27 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                 <p className="pl-2 text-gray-600 text-lg font-semibold">
                   {house.owner.fullName}
                 </p>
+
               </div>
             </div>
+
+            <div className="mt-5 px-3">
+            <h3 className="font-semibold text-xl border-t pt-2">Services</h3>
+            <div className="grid grid-cols-2 mt-4">
+                  <div className="text-lg">
+                    <li>Wifi</li>
+                    <li>Sauna</li>
+                    <li>Netflix</li>
+                  </div>
+                  <div className="text-lg">
+                    <li>Pool</li>
+                    <li>Garden</li>
+                    <li>Kitchen</li>
+                  </div>
+            </div>
+          </div>
+
+
           </div>
           {/* FeaturesCard */}
           <div className="space-y-2 mt-6 sm:mt-0 ">
@@ -162,7 +183,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                   onClick={() => handleFavoriteHouseIcon()}
                 />
               </div>
-              <div className="border border-1 border-teal-500 w-fit px-1 mt-1 rounded-lg">
+              <div className="border-r-2 border-l-2 border-1 border-teal-500 w-fit px-1 mt-1">
                 <p className="text-gray-500">{house.category.categoryName}</p>
               </div>
               <p className="pt-1 text-gray-500">{house.capacity} guests</p>
@@ -209,7 +230,8 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
             </div>
           </div>
         </div>
-        <div className="mt-[650px] sm:mt-80 lg:mt-36 px-6">
+        <div className="mt-[850px] sm:mt-96 lg:mt-42 px-6">
+          
           <div className="hidden sm:inline">
             <DateRange
               ranges={[selectionRange]}

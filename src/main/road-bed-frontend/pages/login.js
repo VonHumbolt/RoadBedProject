@@ -43,7 +43,7 @@ function Login() {
 
         <div className="flex flex-col items-center mt-16 w-[400px] sm:w-full mx-auto">
           <div>
-            <img className="mx-auto mb-1" src="./road_icon.png" />
+            <Image className="mx-auto mb-1 object-contain" src="https://res.cloudinary.com/dspea8wm4/image/upload/v1676559288/road_icon_kh1xt5.png" width={40} height={40} />
             <h2 className="text-5xl font-semibold text-teal-600">Road Bed</h2>
           </div>
 

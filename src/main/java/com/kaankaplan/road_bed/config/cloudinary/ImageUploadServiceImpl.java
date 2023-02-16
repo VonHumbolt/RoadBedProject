@@ -26,7 +26,6 @@ public class ImageUploadServiceImpl implements ImageUploadService {
     public Map uploadImage(MultipartFile multipartFile) {
 
         Map uploadResult = null;
-        
         try{
             File file = convertMultipartFileToFile(multipartFile);
             uploadResult = cloudinary.uploader().upload(file, ObjectUtils.emptyMap());

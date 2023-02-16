@@ -3,6 +3,7 @@ package com.kaankaplan.road_bed.business.abstracts.concretes;
 import com.kaankaplan.road_bed.business.abstracts.RoleService;
 import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.business.abstracts.UserService;
+import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
 import com.kaankaplan.road_bed.entities.House;
@@ -14,6 +15,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.util.Map;
 
 @Service
 public class TenantServiceImpl implements TenantService {
@@ -22,14 +26,16 @@ public class TenantServiceImpl implements TenantService {
     private final UserService userService;
     private final RoleService roleService;
     private final PasswordEncoder passwordEncoder;
+    private final ImageUploadService imageUploadService;
 
     @Autowired
     public TenantServiceImpl(TenantRepository tenantRepository, UserService userService,
-                             RoleService roleService, PasswordEncoder passwordEncoder) {
+                             RoleService roleService, PasswordEncoder passwordEncoder, ImageUploadService imageUploadService) {
         this.tenantRepository = tenantRepository;
         this.userService = userService;
         this.roleService = roleService;
         this.passwordEncoder = passwordEncoder;
+        this.imageUploadService = imageUploadService;
     }
 
     @Override
@@ -68,4 +74,19 @@ public class TenantServiceImpl implements TenantService {
 
         tenantRepository.save(tenant);
     }
+
+    @Override
+    public Tenant updateProfilePicture(String userId, MultipartFile multipartFile) {
+
+        Tenant tenant = tenantRepository.findById(userId).orElseThrow(() -> new RuntimeException("Tenant is not found"));
+        
+//        tenant.profilePictureUrl delete this
+        Map resultMap = imageUploadService.uploadImage(multipartFile);
+
+        tenant.profilePictureUrl = (String) resultMap.get("url");
+
+        return tenantRepository.save(tenant);
+                
+    }
 }
+

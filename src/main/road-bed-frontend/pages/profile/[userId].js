@@ -3,11 +3,42 @@ import MyFavoritesComponent from "@/components/MyFavoritesComponent";
 import MyHouseComponent from "@/components/MyHouseComponent";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
+import { CheckCircleIcon } from "@heroicons/react/solid";
+import TenantService from "@/services/tenantService";
+import { useSession } from "next-auth/react";
 
 function Profile({ user, tenant }) {
+  const { data: session } = useSession();
+
   const [activeTab, setActiveTab] = useState("myHouse");
+  const [profilePic, setProfilePic] = useState(tenant.profilePictureUrl);
+  const [pictureFile, setPictureFile] = useState();
+  const [isPictureChange, setIsPictureChange] = useState(false)
 
   const pictureRef = useRef();
+
+  const changeProfilePic = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPictureFile(file);
+      const url = URL.createObjectURL(file);
+      setProfilePic(url);
+      setIsPictureChange(true)
+    }
+  };
+
+  const updateProfilePicture = () => {
+    const tenantService = new TenantService();
+    const formData = new FormData();
+    formData.append("picture", pictureFile);
+   
+    tenantService
+      .updateProfilePicture(tenant.userId, formData, session.accessToken)
+      .then((res) => {
+        if(res.status === 200)
+          setIsPictureChange(false)
+      });
+  };
 
   return (
     <div className="bg-gray-50 h-screen">
@@ -18,11 +49,29 @@ function Profile({ user, tenant }) {
           <div className="relative w-32 h-32 mx-4">
             <Image
               className="rounded-full object-cover cursor-pointer"
-              src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              src={
+                profilePic ||
+                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+              }
               fill
+              alt=""
               onClick={() => pictureRef.current.click()}
             />
-            <input ref={pictureRef} type="file" className="hidden" />
+            <CheckCircleIcon
+              className={`${
+                isPictureChange ? "inline" : "hidden"
+              } absolute bottom-0 right-0 cursor-pointer
+              hover:scale-105 transform transition-all duration-200 ease-in-out w-10 h-10`}
+              color={"#ED6172"}
+              onClick={updateProfilePicture}
+            />
+            <input
+              ref={pictureRef}
+              type="file"
+              className="hidden"
+              accept="image/png, image/jpeg, image/webp"
+              onChange={changeProfilePic}
+            />
           </div>
 
           {/* User Information */}
@@ -148,7 +197,7 @@ export async function getServerSideProps(context) {
   const tenant = await fetch(
     "http://localhost:8080/tenants/getByEmail/" + user.email
   ).then((res) => res.json());
- 
+
   return {
     props: {
       user,

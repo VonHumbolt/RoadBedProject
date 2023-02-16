@@ -3,10 +3,9 @@ package com.kaankaplan.road_bed.controllers;
 import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.entities.Tenant;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 @RestController
 @RequestMapping("tenants/")
@@ -20,7 +19,13 @@ public class TenantController {
     }
 
     @GetMapping("getByEmail/{email}")
-    public Tenant getByEmail(@PathVariable String email){
+    public Tenant getByEmail(@PathVariable String email) {
         return tenantService.getTenantByEmail(email);
+    }
+
+    @PreAuthorize("hasAnyRole('TENANT')")
+    @PostMapping("updateProfilePic/{userId}")
+    public Tenant updateProfilePicture(@PathVariable String userId, @RequestPart("picture") MultipartFile multipartFile) {
+        return tenantService.updateProfilePicture(userId, multipartFile);
     }
 }

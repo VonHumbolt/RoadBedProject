@@ -16,8 +16,8 @@ function SmallCard({ img, name }) {
         <Image className="rounded-xl" src={img} fill alt="" sizes={100}/>
         <div
           className="absolute h-24 w-24 sm:h-36 sm:w-64 flex items-center justify-center
-            rounded-xl group-hover:bg-teal-300 group-hover:opacity-90 
-            transiton duration-100 ease-out"
+            rounded-xl group-hover:bg-gradient-to-r from-teal-500 to-slate-500 group-hover:opacity-90 
+            transiton duration-100 ease-out text-white"
         >
           <h2 className="hidden group-hover:inline text-md sm:text-xl font-bold ">
             {""}
