@@ -15,4 +15,12 @@ export default class HouseService {
             },
         });
     }
+
+    delete(house, token) {
+        return axios.post(this.apiUrl + "delete", house, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        })
+    }
 }

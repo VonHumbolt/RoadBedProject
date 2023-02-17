@@ -1,10 +1,12 @@
+import axiosInstance from "@/interceptors/interceptor";
 import axios from "axios"
 
 export default class UserService {
+    
     apiUrl = "http://localhost:8080/users/"
 
     getByEmail(email) {
-        return axios.get(this.apiUrl + "getByEmail/" + email);
+        return axiosInstance.get("users/getByEmail/" + email);
     }
 
     addHouseToFavorites(userId, house, token) {

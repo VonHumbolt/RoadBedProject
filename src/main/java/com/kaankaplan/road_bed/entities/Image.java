@@ -1,6 +1,8 @@
 package com.kaankaplan.road_bed.entities;
 
-public class Image {
+import java.io.Serializable;
+
+public class Image implements Serializable {
 
     private final String imageId;
     public String imageUrl;

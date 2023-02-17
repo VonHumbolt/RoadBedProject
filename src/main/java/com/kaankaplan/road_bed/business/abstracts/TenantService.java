@@ -14,6 +14,7 @@ public interface TenantService {
     Tenant saveTenant(TenantRegisterRequest tenantRegisterRequest);
 
     void addHouseToTenantsOwnHouse(House house, String email);
+    void removeHouseFromTenantsOwnHouse(House house, String email);
 
     Tenant updateProfilePicture(String userId, MultipartFile multipartFile);
 }

@@ -49,6 +49,12 @@ public class HouseController {
         return houseService.save(house, multipartFileList);
     }
 
+    @PreAuthorize("hasAnyRole('TENANT', 'ADMIN')")
+    @PostMapping("delete")
+    public House deleteHouse(@RequestBody House house) {
+        return houseService.deleteHouse(house);
+    }
+
     @GetMapping("getByCityNameAndEmptyDate/{cityName}")
     public List<House> getHousesByCityAndEmptyDates(@PathVariable String cityName,
                                                     @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,

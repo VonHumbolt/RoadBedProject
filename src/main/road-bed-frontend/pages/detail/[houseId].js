@@ -1,6 +1,6 @@
 import Header from "@/components/Header";
 import React, { useEffect, useState } from "react";
-import { HeartIcon, WifiIcon } from "@heroicons/react/outline";
+import { HeartIcon } from "@heroicons/react/outline";
 import Image from "next/image";
 import { DateRange } from "react-date-range";
 import ImageDialog from "@/components/ImageDialog";
@@ -275,9 +275,9 @@ export async function getServerSideProps(context) {
     "http://localhost:8080/houses/getById/" + houseId
   ).then((res) => res.json());
 
-  let firstImage = house.imageUrlList[0];
-  let secondImage = house.imageUrlList[1] ? house.imageUrlList[1] : null;
-  let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2] : null;
+  let firstImage = house.imageUrlList[0].imageUrl;
+  let secondImage = house.imageUrlList[1] ? house.imageUrlList[1].imageUrl : null;
+  let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2].imageUrl : null;
 
   return {
     props: {

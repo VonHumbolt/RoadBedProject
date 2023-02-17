@@ -1,7 +1,19 @@
+import HouseService from "@/services/houseService";
+import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
 
 function MyHouseCard({house}) {
+  const {data: session} = useSession();
+
+  const houseService = new HouseService();
+
+  const deleteHouse = () => {
+    houseService.delete(house, session?.accessToken).then(res => {
+      console.log(res.data)
+    })
+  }
+
   return (
     <div>
       <div
@@ -11,7 +23,7 @@ function MyHouseCard({house}) {
         <div className="w-64 h-52 px-3 hidden sm:flex justify-center items-center">
           <Image
             className="w-64 h-40 object-cover rounded-lg"
-            src={house.imageUrlList[0]}
+            src={house.imageUrlList[0].imageUrl}
             width={1200}
             height={900}
           />
@@ -31,12 +43,14 @@ function MyHouseCard({house}) {
 
         <div className="flex flex-col px-10 justify-evenly">
           <div className="px-8 py-1 bg-teal-500 rounded-lg shadow-md
-           hover:scale-105 transform transition-all duration-200 ease-in-out">
+           hover:scale-105 transform transition-all duration-200 ease-in-out
+           active:scale-90">
             <button>Update</button>
           </div>
           <div className="px-8 py-1 bg-[#ED6172] text-white rounded-lg shadow-md 
-          hover:scale-105 transform transition-all duration-200 ease-in-out">
-            <button>Remove</button>
+          hover:scale-105 transform transition-all duration-200 ease-in-out
+          active:scale-90">
+            <button onClick={deleteHouse}>Remove</button>
           </div>
         </div>
 

@@ -3,6 +3,7 @@ package com.kaankaplan.road_bed.business.abstracts.concretes;
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
 import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
+import com.kaankaplan.road_bed.config.concerns.loging.ToDeleteLog;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.Image;
@@ -70,6 +71,9 @@ public class HouseServiceImpl implements HouseService {
                     break;
                 }
             }
+            if (house.reservedDates.size() == 0) {
+                newHouses.add(house);
+            }
         });
         return newHouses;
     }
@@ -92,8 +96,26 @@ public class HouseServiceImpl implements HouseService {
         });
         house.imageUrlList = houseImages;
 
-        tenantService.addHouseToTenantsOwnHouse(house, house.owner.email);
+        House savedHouse = houseRepository.save(house);
 
-        return houseRepository.save(house);
+        tenantService.addHouseToTenantsOwnHouse(savedHouse, house.owner.email);
+
+        return savedHouse;
+    }
+
+    @CacheEvict(value = "houses", allEntries = true)
+    @ToDeleteLog
+    @Transactional
+    @Override
+    public House deleteHouse(House house) {
+        house.imageUrlList.forEach(image -> {
+            imageUploadService.deleteImage(image.getImageId());
+        });
+
+        houseRepository.deleteById(house.getHouseId());
+
+        tenantService.removeHouseFromTenantsOwnHouse(house, house.owner.email);
+
+        return house;
     }
 }

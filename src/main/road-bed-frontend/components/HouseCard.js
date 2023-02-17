@@ -12,7 +12,7 @@ function HouseCard({ house }) {
       >
         <Image
           className="w-72 h-52 rounded-t-2xl mx-auto"
-          src={house.imageUrlList[0]}
+          src={house.imageUrlList[0].imageUrl}
           width={1200}
           height={100}
         />

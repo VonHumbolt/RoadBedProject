@@ -19,4 +19,6 @@ public interface HouseService {
     House getHouseByHouseId(String houseId);
 
     List<House> getHousesByCityAndEmptyDates(String cityName, Date startDate, Date endDate);
+
+    House deleteHouse(House house);
 }

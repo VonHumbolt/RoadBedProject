@@ -73,6 +73,15 @@ public class TenantServiceImpl implements TenantService {
     }
 
     @Override
+    public void removeHouseFromTenantsOwnHouse(House house, String email) {
+        Tenant tenant = tenantRepository.findTenantByEmail(email);
+
+        tenant.ownHouses.removeIf(h -> h.getHouseId().equals(house.getHouseId()));
+
+        tenantRepository.save(tenant);
+    }
+
+    @Override
     public Tenant updateProfilePicture(String userId, MultipartFile multipartFile) {
 
         Tenant tenant = tenantRepository.findById(userId).orElseThrow(() -> new RuntimeException("Tenant is not found"));

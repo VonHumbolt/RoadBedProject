@@ -15,7 +15,7 @@ function SearchedHouseCard({ house, favorited }) {
         <div className="w-64 h-52 px-3 hidden sm:flex justify-center items-center">
           <Image
             className="w-64 h-40 object-cover rounded-lg"
-            src={house.imageUrlList[0]}
+            src={house.imageUrlList[0].imageUrl}
             width={1200}
             height={900}
           />

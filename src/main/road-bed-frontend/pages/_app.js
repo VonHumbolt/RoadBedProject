@@ -16,6 +16,7 @@ Router.events.on("routeChangeStart", progress.start);
 Router.events.on("routeChangeComplete", progress.finish);
 Router.events.on("routeChangeError", progress.finish);
 
+
 export default function App({ Component, pageProps: {session, ...pageProps} }) {
   return (
     <Provider store={store}>

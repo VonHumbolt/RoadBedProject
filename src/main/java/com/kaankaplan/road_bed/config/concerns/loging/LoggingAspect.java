@@ -1,6 +1,8 @@
 package com.kaankaplan.road_bed.config.concerns.loging;
 
 import org.aspectj.lang.ProceedingJoinPoint;
+import org.aspectj.lang.annotation.After;
+import org.aspectj.lang.annotation.AfterReturning;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
 import org.springframework.stereotype.Component;
@@ -22,5 +24,10 @@ public class LoggingAspect {
                 + returnedValue);
 
         return returnedValue;
+    }
+
+    @AfterReturning(value = "@annotation(ToDeleteLog)", returning = "returnedValue")
+    public void deleteLog(Object returnedValue) {
+        logger.info(returnedValue.toString() + " entity is deleted!");
     }
 }
