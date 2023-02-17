@@ -8,7 +8,7 @@ import java.util.List;
 @Document(collection = "tenants")
 public class Tenant extends User{
 
-    public String profilePictureUrl;
+    public Image profilePicture;
 
     public List<House> visitedHouses = new ArrayList<>();
 

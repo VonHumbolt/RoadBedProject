@@ -48,4 +48,15 @@ public class ImageUploadServiceImpl implements ImageUploadService {
 
         return file;
     }
+
+    @Override
+    public Map deleteImage(String imageId) {
+        Map result = null;
+        try {
+            result = cloudinary.uploader().destroy(imageId, Map.of());
+        }catch (IOException e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
 }

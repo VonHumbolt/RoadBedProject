@@ -5,6 +5,7 @@ import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.entities.House;
+import com.kaankaplan.road_bed.entities.Image;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
@@ -79,12 +80,15 @@ public class HouseServiceImpl implements HouseService {
     @Override
     public House save(House house, List<MultipartFile> multipartFiles) {
 
-        List<String> houseImages = new ArrayList<>();
+        List<Image> houseImages = new ArrayList<>();
 
         multipartFiles.forEach((file) -> {
             Map uploadResults =  imageUploadService.uploadImage(file);
+            String imageId = (String) uploadResults.get("public_id");
             String imageUrl = (String) uploadResults.get("url");
-            houseImages.add(imageUrl);
+
+            Image houseImage = new Image(imageId, imageUrl);
+            houseImages.add(houseImage);
         });
         house.imageUrlList = houseImages;
 

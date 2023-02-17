@@ -17,7 +17,7 @@ public class House implements Serializable {
 
     public int capacity;
 
-    public List<String> imageUrlList;
+    public List<Image> imageUrlList;
 
     public Float price;
 
@@ -31,7 +31,7 @@ public class House implements Serializable {
 
     public String address;
 
-    public House(int capacity, List<String> imageUrlList, Float price, City city, String address) {
+    public House(int capacity, List<Image> imageUrlList, Float price, City city, String address) {
         this.capacity = capacity;
         this.imageUrlList = imageUrlList;
         this.price = price;

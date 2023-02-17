@@ -6,10 +6,7 @@ import com.kaankaplan.road_bed.business.abstracts.UserService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
-import com.kaankaplan.road_bed.entities.House;
-import com.kaankaplan.road_bed.entities.Role;
-import com.kaankaplan.road_bed.entities.Tenant;
-import com.kaankaplan.road_bed.entities.User;
+import com.kaankaplan.road_bed.entities.*;
 import com.kaankaplan.road_bed.repositories.TenantRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -79,11 +76,15 @@ public class TenantServiceImpl implements TenantService {
     public Tenant updateProfilePicture(String userId, MultipartFile multipartFile) {
 
         Tenant tenant = tenantRepository.findById(userId).orElseThrow(() -> new RuntimeException("Tenant is not found"));
-        
-//        tenant.profilePictureUrl delete this
-        Map resultMap = imageUploadService.uploadImage(multipartFile);
 
-        tenant.profilePictureUrl = (String) resultMap.get("url");
+        if (tenant.profilePicture != null)
+            imageUploadService.deleteImage(tenant.profilePicture.getImageId());
+
+        Map resultMap = imageUploadService.uploadImage(multipartFile);
+        String imageId = (String) resultMap.get("public_id");
+        String imageUrl = (String) resultMap.get("url");
+
+        tenant.profilePicture = new Image(imageId, imageUrl);
 
         return tenantRepository.save(tenant);
                 
