@@ -11,7 +11,7 @@ function Profile({ user, tenant }) {
   const { data: session } = useSession();
 
   const [activeTab, setActiveTab] = useState("myHouse");
-  const [profilePic, setProfilePic] = useState(tenant.profilePicture.imageUrl);
+  const [profilePic, setProfilePic] = useState(tenant.profilePicture?.imageUrl);
   const [pictureFile, setPictureFile] = useState();
   const [isPictureChange, setIsPictureChange] = useState(false);
   const [isLoading, setIsLoading] = useState(false)
@@ -29,7 +29,7 @@ function Profile({ user, tenant }) {
   };
 
   const updateProfilePicture = async () => {
-    const tenantService = new TenantService();
+    const tenantService = new TenantService(session);
     const formData = new FormData();
     formData.append("picture", pictureFile);
     setIsLoading(true)
@@ -55,7 +55,7 @@ function Profile({ user, tenant }) {
               className="rounded-full object-cover cursor-pointer"
               src={
                 profilePic ||
-                "https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                "https://res.cloudinary.com/dspea8wm4/image/upload/v1676743195/default_profile_pic_aqsicv.jpg"
               }
               fill
               alt=""

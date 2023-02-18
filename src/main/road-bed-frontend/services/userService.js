@@ -1,27 +1,23 @@
-import axiosInstance from "@/interceptors/interceptor";
-import axios from "axios"
+import Interceptor from "@/interceptors/interceptor";
 
 export default class UserService {
     
-    apiUrl = "http://localhost:8080/users/"
+    apiUrl = "users/"
+    axiosInstance;
+
+    constructor(session) {
+        this.axiosInstance = new Interceptor(session).getInstance();
+    }
 
     getByEmail(email) {
-        return axiosInstance.get("users/getByEmail/" + email);
+        return this.axiosInstance.get(this.apiUrl + "getByEmail/" + email);
     }
 
-    addHouseToFavorites(userId, house, token) {
-        return axios.post(this.apiUrl + "addFavorite/" + userId, house, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-        })
+    addHouseToFavorites(userId, house) {
+        return this.axiosInstance.post(this.apiUrl + "addFavorite/" + userId, house)
     }
     
-    removeHouseFromFavorites(userId, house, token) {
-        return axios.post(this.apiUrl + "removeFavorite/" + userId, house, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            },
-        })
+    removeHouseFromFavorites(userId, house) {
+        return this.axiosInstance.post(this.apiUrl + "removeFavorite/" + userId, house)
     }
 }

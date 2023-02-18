@@ -64,7 +64,7 @@ function Create({ cities, categories }) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-    houseService.save(formData, session?.accessToken).then((res) => {
+    houseService.save(formData).then((res) => {
       if(res.status === 200)
         router.push("/detail/" + res.data.houseId);
     });

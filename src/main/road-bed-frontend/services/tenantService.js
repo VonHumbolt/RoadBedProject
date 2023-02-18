@@ -1,13 +1,17 @@
-import axios from "axios";
+import Interceptor from "@/interceptors/interceptor";
 
 export default class TenantService {
-    apiUrl = "http://localhost:8080/tenants/";
+    apiUrl = "tenants/"
+    axiosInstance;
 
-    updateProfilePicture(userId, formData, token) {
-        return axios.post(this.apiUrl + "updateProfilePic/" + userId, formData, {
+    constructor(session) {
+        this.axiosInstance = new Interceptor(session).getInstance();
+    }
+
+    updateProfilePicture(userId, formData) {
+        return this.axiosInstance.post(this.apiUrl + "updateProfilePic/" + userId, formData, {
             headers: {
                 "Content-Type": "multipart/form-data",
-                "Authorization": `Bearer ${token}`
             }
         })
     }

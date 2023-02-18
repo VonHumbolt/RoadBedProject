@@ -1,9 +1,14 @@
-import axios from "axios"
+import Interceptor from "@/interceptors/interceptor";
 
 export default class CityService {
-    apiUrl = "http://localhost:8080/cities/"
+    apiUrl = "cities/"
+    axiosInstance;
+
+    constructor(session) {
+        this.axiosInstance = new Interceptor(session).getInstance();
+    }
 
     getall() {
-        return axios.get("getall")
+        return this.axiosInstance.get(this.apiUrl + "getall");
     }
 }

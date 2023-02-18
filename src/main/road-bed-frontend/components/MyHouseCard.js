@@ -6,10 +6,10 @@ import React from "react";
 function MyHouseCard({house}) {
   const {data: session} = useSession();
 
-  const houseService = new HouseService();
+  const houseService = new HouseService(session);
 
   const deleteHouse = () => {
-    houseService.delete(house, session?.accessToken).then(res => {
+    houseService.delete(house).then(res => {
       console.log(res.data)
     })
   }

@@ -1,26 +1,26 @@
-import axios from "axios";
+import Interceptor from "@/interceptors/interceptor";
 
 export default class HouseService {
-    apiUrl = "http://localhost:8080/houses/";
+    apiUrl = "houses/"
+    axiosInstance;
+
+    constructor(session) {
+        this.axiosInstance = new Interceptor(session).getInstance();
+    }
 
     getall() {
-        return axios.get(this.apiUrl + "getall");
+        return this.axiosInstance.get(this.apiUrl + "getall");
     }
     
-    save(formData, token) {
-        return axios.post(this.apiUrl + "save", formData, {
+    save(formData) {
+        return this.axiosInstance.post(this.apiUrl + "save", formData, {
             headers: {
                 'Content-Type':'multipart/form-data',
-                "Authorization": `Bearer ${token}`
             },
         });
     }
 
-    delete(house, token) {
-        return axios.post(this.apiUrl + "delete", house, {
-            headers: {
-                "Authorization": `Bearer ${token}`
-            }
-        })
+    delete(house) {
+        return this.axiosInstance.post(this.apiUrl + "delete", house)
     }
 }

@@ -8,8 +8,8 @@ import UserService from "@/services/userService";
 import { useSession } from "next-auth/react";
 
 function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
-  const userService = new UserService();
   const { data: session } = useSession();
+  const userService = new UserService(session);
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -68,7 +68,6 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
         .addHouseToFavorites(
           user?.userId,
           house,
-          session?.accessToken
         )
         .then((res) => {
           if (res.status === 200) setIsFavorite(true);
@@ -78,7 +77,6 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
         .removeHouseFromFavorites(
           user?.userId,
           house,
-          session?.accessToken
         )
         .then((res) => {
           if (res.status === 200) setIsFavorite(false);
@@ -89,7 +87,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
   return (
     <div className="pb-10">
       <Header />
-
+    
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 px-6 py-12 w-full h-64">
           {/* Images */}
