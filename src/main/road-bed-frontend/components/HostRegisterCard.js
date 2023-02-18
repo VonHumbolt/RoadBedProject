@@ -11,10 +11,10 @@ function HostRegisterCard() {
         md:w-[800px] lg:w-[900px] xl:w-[1000px] 2xl:w-[1100px]
      bg-gradient-to-r from-teal-500 to-slate-500 mx-auto p-5 rounded-2xl"
     >
-      <div className="flex flex-row justify-start sm:px-8 h-64 items-center py-3">
+      <div className="flex flex-row justify-between sm:px-8 h-64 items-center py-3">
         <div>
-          <h2 className="font-bold text-4xl sm:text-6xl text-slate-700"> Become a Host</h2>
-          <p className="text-2xl sm:text-3xl text-slate-200 pt-5 ">
+          <h2 className="font-bold text-4xl md:text-6xl text-slate-700"> Become a Host</h2>
+          <p className="text-2xl md:text-3xl text-slate-200 pt-5 ">
             Move your house to Road Bed.
           </p>
           <p className="text-2xl text-slate-300 pb-8 pt-1">
@@ -27,8 +27,11 @@ function HostRegisterCard() {
             Register Now
           </button>
         </div>
-        
+        <div>
+         <img className="hidden sm:flex md:w-80 w-96 object-contain" src="/bg_card.png" alt="" />
+        </div>
       </div>
+      
     </div>
   );
 }
