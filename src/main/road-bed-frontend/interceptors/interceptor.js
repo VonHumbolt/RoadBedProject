@@ -35,8 +35,8 @@ class Interceptor {
               originalConfig.sent = true;
               try {
                 const refreshToken = {
-                  refreshToken: session.refreshToken,
-                  email: session.user.email,
+                  refreshToken: session?.refreshToken,
+                  email: session?.user?.email,
                 };
                 const result = await this.axiosInstance.post(
                   "auth/refresh/accessToken",

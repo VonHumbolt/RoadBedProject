@@ -1,5 +1,4 @@
 import Head from "next/head";
-import Image from "next/image";
 import Header from "@/components/Header";
 import Cities from "@/components/Cities";
 import HostRegisterCard from "@/components/HostRegisterCard";
@@ -20,8 +19,6 @@ export default function Home({ houses, categories }) {
 
       <Header />
 
-      {/* <div className="relative h-[300px] sm:h-[400px] lg:h-[500px] xl:h-[600px]
-      2xl:h-[700px]"> */}
       <div className="max-w-7xl mx-auto">
        
         <div className="flex justify-between items-center">

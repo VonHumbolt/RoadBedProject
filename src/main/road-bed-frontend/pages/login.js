@@ -1,16 +1,11 @@
 import Header from "@/components/Header";
-import { save } from "@/redux/userSlice";
-import AuthService from "@/services/authService";
 import { signIn } from "next-auth/react";
 import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
-import { useDispatch } from "react-redux";
 
 function Login() {
-  const authService = new AuthService();
-  const dispatch = useDispatch();
 
   const {
     register,
@@ -18,9 +13,6 @@ function Login() {
     formState: { errors },
   } = useForm();
   const onSubmit = async (data) => {
-    // authService.login(data).then((result) => {
-    //   dispatch(save(result.data));
-    // });
     await signIn("credentials", {
       email: data.email,
       password: data.password,

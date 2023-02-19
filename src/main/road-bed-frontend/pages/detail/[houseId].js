@@ -5,11 +5,25 @@ import Image from "next/image";
 import { DateRange } from "react-date-range";
 import ImageDialog from "@/components/ImageDialog";
 import UserService from "@/services/userService";
+import {
+  FaWifi,
+  FaSwimmingPool,
+  FaTree,
+  FaUtensils,
+  FaBath,
+} from "react-icons/fa";
+import { SiNetflix } from "react-icons/si";
 import { useSession } from "next-auth/react";
+import { useRouter } from "next/router";
+import { useDispatch } from "react-redux";
+import { add } from "@/redux/houseSlice";
 
-function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
+function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
   const { data: session } = useSession();
   const userService = new UserService(session);
+
+  const router = useRouter()
+  const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
   const [selectedImage, setSelectedImage] = useState();
@@ -18,7 +32,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
   const [startDate, setStartDate] = useState(new Date());
   const [endDate, setEndDate] = useState(new Date());
   const [selectedDayCount, setSelectedDayCount] = useState(1);
-  const [user, setUser] = useState({})
+  const [user, setUser] = useState({});
 
   const selectionRange = {
     startDate: startDate,
@@ -28,20 +42,21 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
 
   useEffect(() => {
     getInitialData();
-  }, [])
-  
+  }, []);
+
   const getInitialData = async () => {
-    if(session) {
-      await userService.getByEmail(session?.user?.email).then(res => {
-        const userInfo = res.data
-        let isHouseFavorite = userInfo.favoriteHouses?.some(h => h.houseId === house.houseId);
-        
-        setUser(userInfo)
-        setIsFavorite(isHouseFavorite)
+    if (session) {
+      await userService.getByEmail(session?.user?.email).then((res) => {
+        const userInfo = res.data;
+        let isHouseFavorite = userInfo.favoriteHouses?.some(
+          (h) => h.houseId === house.houseId
+        );
+
+        setUser(userInfo);
+        setIsFavorite(isHouseFavorite);
       });
     }
-    
-  }
+  };
 
   const handleSelectDate = (ranges) => {
     setStartDate(ranges.selection.startDate);
@@ -64,30 +79,32 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
 
   const handleFavoriteHouseIcon = () => {
     if (!isFavorite) {
-      userService
-        .addHouseToFavorites(
-          user?.userId,
-          house,
-        )
-        .then((res) => {
-          if (res.status === 200) setIsFavorite(true);
-        });
+      userService.addHouseToFavorites(user?.userId, house).then((res) => {
+        if (res.status === 200) setIsFavorite(true);
+      });
     } else {
-      userService
-        .removeHouseFromFavorites(
-          user?.userId,
-          house,
-        )
-        .then((res) => {
-          if (res.status === 200) setIsFavorite(false);
-        });
+      userService.removeHouseFromFavorites(user?.userId, house).then((res) => {
+        if (res.status === 200) setIsFavorite(false);
+      });
     }
   };
+
+  const goToPayment = () => {
+    const houseForReserve = {
+      houseId: house.houseId,
+      city: house.city,
+      startDate: startDate,
+      endDate: endDate,
+      totalPrice: selectedDayCount * house.price + 100,
+    }
+    dispatch(add(houseForReserve))
+    router.push("/payment");
+  }
 
   return (
     <div className="pb-10">
       <Header />
-    
+
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 px-6 py-12 w-full h-64">
           {/* Images */}
@@ -134,39 +151,57 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
 
               <div className="flex items-center px-2">
                 <Image
-                  className="h-10 w-10 object-cover rounded-full"
+                  className="h-8 w-8 object-cover rounded-full"
                   src={
-                    "https://img.freepik.com/free-photo/portrait-charming-middle-aged-attractive-woman-with-blonde-hair_273609-48348.jpg?w=1800&t=st=1675871376~exp=1675871976~hmac=ed53602584a4adcf76a6552e9c1a7fea98249b99ae05aa6416a4f9fec9f55061"
+                    tenant?.profilePicture ||
+                    "https://res.cloudinary.com/dspea8wm4/image/upload/v1676743195/default_profile_pic_aqsicv.jpg"
                   }
                   width={100}
                   height={100}
                 />
-                <p className="pl-2 text-gray-600 text-lg ">Your Host: </p>
+                <p className="pl-2 text-gray-600 text-md ">Your Host: </p>
 
-                <p className="pl-2 text-gray-600 text-lg font-semibold">
+                <p className="pl-2 text-gray-600 text-md font-semibold">
                   {house.owner.fullName}
                 </p>
-
               </div>
             </div>
 
             <div className="mt-5 px-3">
-            <h3 className="font-semibold text-xl border-t pt-2">Services</h3>
-            <div className="grid grid-cols-2 mt-4">
-                  <div className="text-lg">
-                    <li>Wifi</li>
-                    <li>Sauna</li>
-                    <li>Netflix</li>
+              <h3 className="font-semibold text-xl border-t pt-2">
+                Services you will have in this house
+              </h3>
+              <div className="grid grid-cols-2 mt-6">
+                <div className="text-lg space-y-2 mr-2">
+                  <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
+                    <FaWifi color="#ed6172" />
+                    <span> Wifi</span>
                   </div>
-                  <div className="text-lg">
-                    <li>Pool</li>
-                    <li>Garden</li>
-                    <li>Kitchen</li>
+                  <div className="flex items-center space-x-2  text-xl border-2 p-3 rounded-lg">
+                    <FaBath color="#ed6172" />
+                    <span>Bathroom</span>
                   </div>
+                  <div className="flex items-center space-x-2  text-xl border-2 p-3 rounded-lg">
+                    <SiNetflix color="#ed6172"/>
+                    <span>Netflix</span>
+                  </div>
+                </div>
+                <div className="text-lg space-y-2">
+                  <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
+                    <FaSwimmingPool color="#ed6172"/>
+                    <span> Pool</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
+                    <FaTree color="#ed6172" />
+                    <span>Garden</span>
+                  </div>
+                  <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
+                    <FaUtensils color="#ed6172" />
+                    <span>Kitchen</span>
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-
           </div>
           {/* FeaturesCard */}
           <div className="space-y-2 mt-6 sm:mt-0 ">
@@ -221,6 +256,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
                   className="mx-auto px-4 py-1 rounded-lg font-bold bg-teal-500 shadow-md
                     hover:scale-105 hover:shadow-lg transform transition-all duration-200 ease-in-out
                     text-gray-50"
+                    onClick={() => goToPayment()}
                 >
                   Reserve
                 </button>
@@ -228,8 +264,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage }) {
             </div>
           </div>
         </div>
-        <div className="mt-[850px] sm:mt-96 lg:mt-42 px-6">
-          
+        <div className="mt-[900px] sm:mt-96 lg:mt-42 p-6">
           <div className="hidden sm:inline">
             <DateRange
               ranges={[selectionRange]}
@@ -273,9 +308,17 @@ export async function getServerSideProps(context) {
     "http://localhost:8080/houses/getById/" + houseId
   ).then((res) => res.json());
 
+  const tenant = await fetch(
+    "http://localhost:8080/tenants/getByEmail/" + house.owner.email
+  ).then((res) => res.json());
+
   let firstImage = house.imageUrlList[0].imageUrl;
-  let secondImage = house.imageUrlList[1] ? house.imageUrlList[1].imageUrl : null;
-  let thirdImage = house.imageUrlList[2] ? house.imageUrlList[2].imageUrl : null;
+  let secondImage = house.imageUrlList[1]
+    ? house.imageUrlList[1].imageUrl
+    : null;
+  let thirdImage = house.imageUrlList[2]
+    ? house.imageUrlList[2].imageUrl
+    : null;
 
   return {
     props: {
@@ -283,6 +326,7 @@ export async function getServerSideProps(context) {
       firstImage,
       secondImage,
       thirdImage,
+      tenant,
     },
   };
 }

@@ -1,6 +1,5 @@
 import Header from "@/components/Header";
 import ImageDialog from "@/components/ImageDialog";
-import { userFromRedux } from "@/redux/userSlice";
 import HouseService from "@/services/houseService";
 import UserService from "@/services/userService";
 import { PlusCircleIcon } from "@heroicons/react/solid";
@@ -8,15 +7,13 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
-import { useSelector } from "react-redux";
 
 function Create({ cities, categories }) {
-  // const user = useSelector(userFromRedux);
   const { data: session } = useSession();
   const router = useRouter();
 
-  const houseService = new HouseService();
-  const userService = new UserService();
+  const houseService = new HouseService(session);
+  const userService = new UserService(session);
 
   const [selectedImageFiles, setSelectedImageFiles] = useState([]);
   const [selectedCity, setSelectedCity] = useState();
