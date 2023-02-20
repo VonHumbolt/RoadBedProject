@@ -3,9 +3,10 @@ import MyFavoritesComponent from "@/components/MyFavoritesComponent";
 import MyHouseComponent from "@/components/MyHouseComponent";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { CheckCircleIcon } from "@heroicons/react/solid";
+import { ArrowNarrowUpIcon, BookmarkIcon, CheckCircleIcon, ClipboardCheckIcon, HeartIcon, StarIcon } from "@heroicons/react/solid";
 import TenantService from "@/services/tenantService";
 import { useSession } from "next-auth/react";
+import { HomeIcon } from "@heroicons/react/solid";
 
 function Profile({ user, tenant }) {
   const { data: session } = useSession();
@@ -14,7 +15,7 @@ function Profile({ user, tenant }) {
   const [profilePic, setProfilePic] = useState(tenant.profilePicture?.imageUrl);
   const [pictureFile, setPictureFile] = useState();
   const [isPictureChange, setIsPictureChange] = useState(false);
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false);
 
   const pictureRef = useRef();
 
@@ -32,7 +33,7 @@ function Profile({ user, tenant }) {
     const tenantService = new TenantService(session);
     const formData = new FormData();
     formData.append("picture", pictureFile);
-    setIsLoading(true)
+    setIsLoading(true);
 
     await tenantService
       .updateProfilePicture(tenant.userId, formData, session.accessToken)
@@ -40,7 +41,7 @@ function Profile({ user, tenant }) {
         if (res.status === 200) {
           setIsPictureChange(false);
         }
-        setIsLoading(false)
+        setIsLoading(false);
       });
   };
 
@@ -63,14 +64,17 @@ function Profile({ user, tenant }) {
             />
             <CheckCircleIcon
               className={`${
-                (isPictureChange && !isLoading) ? "inline" : "hidden"
+                isPictureChange && !isLoading ? "inline" : "hidden"
               } absolute bottom-0 right-0 cursor-pointer
               hover:scale-105 transform transition-all duration-200 ease-in-out w-10 h-10`}
               color={"#ED6172"}
               onClick={updateProfilePicture}
             />
 
-            <div role="status" className={`${!isLoading && "hidden"} absolute bottom-0 -right-3`}>
+            <div
+              role="status"
+              className={`${!isLoading && "hidden"} absolute bottom-0 -right-3`}
+            >
               <svg
                 aria-hidden="true"
                 className="w-10 h-10 mr-2 text-gray-200 animate-spin  fill-[#ED6172]"
@@ -105,81 +109,69 @@ function Profile({ user, tenant }) {
                 <p className="text-2xl font-semibold pt-1">{user.fullName}</p>
                 <div className="flex space-x-6">
                   <div
-                    className="relative hover:scale-105 active:scale-90
-                      transition-all transform duration-200 ease-in-out"
+                    className={`relative hover:scale-105 active:scale-90
+                      transition-all transform duration-200 ease-in-out
+                      inline-flex items-center px-5 py-2.5 text-sm
+                       font-medium text-center text-white ${activeTab === "myHouse" ? "bg-teal-500" : "bg-white text-black"} 
+                       rounded-lg hover:bg-teal-700
+                        focus:ring-4 focus:outline-none `}
                   >
-                    <p
-                      className={`${
-                        activeTab === "myHouse" ? "underline" : ""
-                      } hover:underline underline-offset-4
+                    <div
+                      className={`flex items-center
                      decoration-teal-500 decoration-4 cursor-pointer `}
                       onClick={() => setActiveTab("myHouse")}
                     >
+                      <HomeIcon className="w-6 h-6 mr-1" />
                       My Houses
-                    </p>
-                    <div
-                      className={`absolute -top-3 -right-5 px-2 py-1 bg-teal-500 text-xs text-white
-                      font-semibold rounded-full ${
-                        tenant.ownHouses.length === 0
-                          ? "hidden"
-                          : "inline-block"
-                      }`}
-                    >
-                      {tenant.ownHouses.length > 9
-                        ? "9+"
-                        : tenant.ownHouses.length}
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-[#ed6172] border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                        {tenant.ownHouses.length > 9
+                          ? "9+"
+                          : tenant.ownHouses.length}
+                      </div>
                     </div>
                   </div>
                   <div
-                    className="relative hover:scale-105 active:scale-90 transition-all
-                   transform duration-200 ease-in-out"
+                    className={`relative hover:scale-105 active:scale-90
+                    transition-all transform duration-200 ease-in-out
+                    inline-flex items-center px-5 py-2.5 text-sm
+                     font-medium text-center text-white ${activeTab === "favorites" ? "bg-teal-500" : "bg-white text-black"} 
+                     rounded-lg hover:bg-teal-700
+                      focus:ring-4 focus:outline-none `}
                   >
-                    <p
-                      className={`${
-                        activeTab === "favorites" ? "underline" : ""
-                      } hover:underline 
+                    <div
+                      className={`flex items-center
                     underline-offset-4 decoration-teal-500 decoration-4 cursor-pointer `}
                       onClick={() => setActiveTab("favorites")}
                     >
+                      <HeartIcon className="w-6 h-6 mr-1" />
                       Favorite Houses
-                    </p>
-                    <div
-                      className={`absolute -top-3 -right-5 px-2 py-1 bg-teal-500 text-xs text-white
-                      font-semibold rounded-full ${
-                        user.favoriteHouses.length === 0
-                          ? "hidden"
-                          : "inline-block"
-                      }`}
-                    >
-                      {user.favoriteHouses.length > 9
-                        ? "9+"
-                        : user.favoriteHouses.length}
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-[#ed6172] border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                        {user.favoriteHouses.length > 9
+                          ? "9+"
+                          : user.favoriteHouses.length}
+                      </div>
                     </div>
                   </div>
                   <div
-                    className="relative hover:scale-105 active:scale-90 transition-all
-                   transform duration-200 ease-in-out"
+                    className={`relative hover:scale-105 active:scale-90
+                    transition-all transform duration-200 ease-in-out
+                    inline-flex items-center px-5 py-2.5 text-sm
+                     font-medium text-center text-white ${activeTab === "visited" ? "bg-teal-500" : "bg-white text-black"} 
+                     rounded-lg hover:bg-teal-700
+                      focus:ring-4 focus:outline-none `}
                   >
-                    <p
-                      className={`${
-                        activeTab === "visited" ? "underline" : ""
-                      } hover:underline 
-                    underline-offset-4 decoration-teal-500 decoration-4 cursor-pointer `}
+                    <div
+                      className={`flex items-center
+                   decoration-teal-500 decoration-4 cursor-pointer `}
                       onClick={() => setActiveTab("visited")}
                     >
+                      <ClipboardCheckIcon className="w-6 h-6 mr-1" />
                       Visited Houses
-                    </p>
-                    <div
-                      className={`absolute -top-3 -right-5 px-2 py-1 bg-teal-500 text-xs text-white
-                      font-semibold rounded-full ${
-                        tenant.visitedHouses.length === 0
-                          ? "hidden"
-                          : "inline-block"
-                      }`}
-                    >
-                      {tenant.visitedHouses.length > 9
-                        ? "9+"
-                        : tenant.visitedHouses.length}
+                      <div class="absolute inline-flex items-center justify-center w-6 h-6 text-xs font-bold text-white bg-[#ed6172] border-2 border-white rounded-full -top-2 -right-2 dark:border-gray-900">
+                        {tenant.visitedHouses.length > 9
+                          ? "9+"
+                          : tenant.visitedHouses.length}
+                      </div>
                     </div>
                   </div>
                 </div>

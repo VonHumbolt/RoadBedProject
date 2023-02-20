@@ -174,29 +174,29 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
               <div className="grid grid-cols-2 mt-6">
                 <div className="text-lg space-y-2 mr-2">
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
-                    <FaWifi color="#ed6172" />
+                    <FaWifi color="#14B8A5" />
                     <span> Wifi</span>
                   </div>
                   <div className="flex items-center space-x-2  text-xl border-2 p-3 rounded-lg">
-                    <FaBath color="#ed6172" />
+                    <FaBath color="#14B8A5" />
                     <span>Bathroom</span>
                   </div>
                   <div className="flex items-center space-x-2  text-xl border-2 p-3 rounded-lg">
-                    <SiNetflix color="#ed6172"/>
+                    <SiNetflix color="#14B8A5"/>
                     <span>Netflix</span>
                   </div>
                 </div>
                 <div className="text-lg space-y-2">
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
-                    <FaSwimmingPool color="#ed6172"/>
+                    <FaSwimmingPool color="#14B8A5"/>
                     <span> Pool</span>
                   </div>
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
-                    <FaTree color="#ed6172" />
+                    <FaTree color="#14B8A5" />
                     <span>Garden</span>
                   </div>
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
-                    <FaUtensils color="#ed6172" />
+                    <FaUtensils color="#14B8A5" />
                     <span>Kitchen</span>
                   </div>
                 </div>
@@ -255,7 +255,7 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
                 <button
                   className="mx-auto px-4 py-1 rounded-lg font-bold bg-teal-500 shadow-md
                     hover:scale-105 hover:shadow-lg transform transition-all duration-200 ease-in-out
-                    text-gray-50"
+                    text-gray-50" 
                     onClick={() => goToPayment()}
                 >
                   Reserve
