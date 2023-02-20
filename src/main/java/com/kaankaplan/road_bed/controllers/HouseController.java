@@ -1,6 +1,7 @@
 package com.kaankaplan.road_bed.controllers;
 
 import com.kaankaplan.road_bed.business.abstracts.HouseService;
+import com.kaankaplan.road_bed.dtos.ReserveHouseRequest;
 import com.kaankaplan.road_bed.entities.House;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -61,5 +62,11 @@ public class HouseController {
                                                     @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
 
         return houseService.getHousesByCityAndEmptyDates(cityName, startDate, endDate);
+    }
+
+    @PreAuthorize("hasAnyRole('TENANT', 'ADMIN')")
+    @PostMapping("reserve")
+    public void reserveHouse(@RequestBody ReserveHouseRequest reserveHouseRequest){
+        houseService.reserveHouse(reserveHouseRequest);
     }
 }

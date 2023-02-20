@@ -1,12 +1,20 @@
 import Header from "@/components/Header";
 import { houseFromRedux } from "@/redux/houseSlice";
+import HouseService from "@/services/houseService";
 import { format } from "date-fns";
-import React, { useState } from "react";
+import moment from "moment/moment";
+import { useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import { useSelector } from "react-redux";
 
 function Payment() {
+  const {data: session} = useSession();
   const houseDetail = useSelector(houseFromRedux);
+
+  const houseService = new HouseService(session);
+
+  const [selectedDates, setSelectedDates] = useState([]);
 
   const startDate = format(houseDetail.startDate, "dd/MM/yy");
   const endDate = format(houseDetail.endDate, "dd/MM/yy");
@@ -15,7 +23,22 @@ function Payment() {
     houseDetail.endDate.getTime() - houseDetail.startDate.getTime();
   const day = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
 
+  useEffect(() => {
+    calculateSelectedDates()
+  }, [])
   
+  const calculateSelectedDates = () => {
+    const datesArray = [];
+    let startDate = moment(houseDetail.startDate);
+    let endDate = moment(houseDetail.endDate);
+
+    while(startDate.isSameOrBefore(endDate)){
+      datesArray.push(startDate.clone().format('yyyy-MM-DD'));
+      startDate.add(1, 'days')
+    }
+    setSelectedDates(datesArray)
+  }
+
   const {
     register,
     handleSubmit,
@@ -23,7 +46,11 @@ function Payment() {
   } = useForm();
 
   const onSubmit = (data) => {
-    console.log(data);
+    const reserveDto = {
+      houseId: houseDetail.houseId,
+      datesForReserve: selectedDates
+    }
+    houseService.reserveHouse(reserveDto).then(res => console.log(res.data))
   };
   return (
     <div className="">

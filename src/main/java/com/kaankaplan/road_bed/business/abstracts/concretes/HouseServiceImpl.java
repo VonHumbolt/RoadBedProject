@@ -5,6 +5,7 @@ import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToDeleteLog;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
+import com.kaankaplan.road_bed.dtos.ReserveHouseRequest;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.Image;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
@@ -58,20 +59,25 @@ public class HouseServiceImpl implements HouseService {
                         cityName
                 );
 
+
         List<House> newHouses = new ArrayList<>();
 
         houses.forEach(house -> {
-            for (int i=0; i< house.reservedDates.size(); i++) {
-                if (startDate.compareTo( house.reservedDates.get(i)) < 0 && endDate.compareTo(house.reservedDates.get(i)) < 0){
-                    newHouses.add(house);
-                    break;
-                }
-                else if (startDate.compareTo(house.reservedDates.get(i)) > 0 && endDate.compareTo(house.reservedDates.get(i)) > 0){
-                    newHouses.add(house);
-                    break;
-                }
-            }
-            if (house.reservedDates.size() == 0) {
+            boolean isIn = !Collections.disjoint(house.reservedDates, List.of(startDate, endDate));
+//            for (int i=0; i< house.reservedDates.size(); i++) {
+//                if (startDate.compareTo( house.reservedDates.get(i)) < 0 && endDate.compareTo(house.reservedDates.get(i)) < 0){
+//                    newHouses.add(house);
+//                    break;
+//                }
+//                else if (startDate.compareTo(house.reservedDates.get(i)) > 0 && endDate.compareTo(house.reservedDates.get(i)) > 0){
+//                    newHouses.add(house);
+//                    break;
+//                }
+//            }
+//            if (house.reservedDates.size() == 0) {
+//                newHouses.add(house);
+//            }
+            if (!isIn) {
                 newHouses.add(house);
             }
         });
@@ -117,5 +123,13 @@ public class HouseServiceImpl implements HouseService {
         tenantService.removeHouseFromTenantsOwnHouse(house, house.owner.email);
 
         return house;
+    }
+
+    @Override
+    public void reserveHouse(ReserveHouseRequest reserveHouseRequest) {
+        House house = houseRepository.findHouseByHouseId(reserveHouseRequest.houseId());
+
+        house.reservedDates.addAll(reserveHouseRequest.datesForReserve());
+        houseRepository.save(house);
     }
 }

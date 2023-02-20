@@ -1,5 +1,6 @@
 package com.kaankaplan.road_bed.business.abstracts;
 
+import com.kaankaplan.road_bed.dtos.ReserveHouseRequest;
 import com.kaankaplan.road_bed.entities.House;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -19,6 +20,8 @@ public interface HouseService {
     House getHouseByHouseId(String houseId);
 
     List<House> getHousesByCityAndEmptyDates(String cityName, Date startDate, Date endDate);
+
+    void reserveHouse(ReserveHouseRequest reserveHouseRequest);
 
     House deleteHouse(House house);
 }

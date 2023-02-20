@@ -17,5 +17,5 @@ public interface HouseRepository extends MongoRepository<House, String> {
 
     House findHouseByHouseId(String houseId);
 
-    List<House> findHousesByCity_CityNameAndReservedDatesIn(String city_cityName, Collection<List<Date>> reservedDates);
+    List<House> findHousesByCity_CityNameAndReservedDatesIsBetween(String city_cityName, Collection<List<Date>> reservedDates);
 }

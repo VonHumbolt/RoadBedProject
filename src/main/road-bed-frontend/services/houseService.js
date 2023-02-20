@@ -23,4 +23,8 @@ export default class HouseService {
     delete(house) {
         return this.axiosInstance.post(this.apiUrl + "delete", house)
     }
+
+    reserveHouse(reserveDto) {
+        return this.axiosInstance.post(this.apiUrl + "reserve", reserveDto)
+    }
 }
