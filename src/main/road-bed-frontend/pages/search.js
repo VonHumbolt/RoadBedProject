@@ -32,8 +32,8 @@ function Search({city, formattedStartDate, formattedEndDate, houses}) {
 export async function getServerSideProps(context) {
 
   const {city, startDate, endDate} = context.query
-  const formattedStartDate = format(new Date(startDate), "dd MMMM yy");
-  const formattedEndDate = format(new Date(endDate), "dd MMMM yy");
+  const formattedStartDate = format(new Date(startDate), "dd MMMM yyyy");
+  const formattedEndDate = format(new Date(endDate), "dd MMMM yyyy");
 
   const houses = await fetch(`http://localhost:8080/houses/getByCityNameAndEmptyDate/${city}?start=${format(new Date(startDate), "yyyy-MM-dd")}&end=${format(new Date(endDate), "yyyy-MM-dd")}`)
     .then((res) => res.json());

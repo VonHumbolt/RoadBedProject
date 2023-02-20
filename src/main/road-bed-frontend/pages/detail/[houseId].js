@@ -16,13 +16,13 @@ import { SiNetflix } from "react-icons/si";
 import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
-import { add } from "@/redux/houseSlice";
+import { add, remove } from "@/redux/houseSlice";
 
 function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
   const { data: session } = useSession();
   const userService = new UserService(session);
 
-  const router = useRouter()
+  const router = useRouter();
   const dispatch = useDispatch();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -89,17 +89,26 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
     }
   };
 
+  const calculateDaysBetweenDates = () => {
+    const difference = endDate.getTime() - startDate.getTime();
+    return Math.ceil(difference / (1000 * 3600 * 24)) + 1;
+  };
+
   const goToPayment = () => {
+    dispatch(remove());
+
+    const days = calculateDaysBetweenDates()
     const houseForReserve = {
       houseId: house.houseId,
       city: house.city,
       startDate: startDate,
       endDate: endDate,
+      days: days,
       totalPrice: selectedDayCount * house.price + 100,
-    }
-    dispatch(add(houseForReserve))
+    };
+    dispatch(add(houseForReserve));
     router.push("/payment");
-  }
+  };
 
   return (
     <div className="pb-10">
@@ -182,13 +191,13 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
                     <span>Bathroom</span>
                   </div>
                   <div className="flex items-center space-x-2  text-xl border-2 p-3 rounded-lg">
-                    <SiNetflix color="#14B8A5"/>
+                    <SiNetflix color="#14B8A5" />
                     <span>Netflix</span>
                   </div>
                 </div>
                 <div className="text-lg space-y-2">
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
-                    <FaSwimmingPool color="#14B8A5"/>
+                    <FaSwimmingPool color="#14B8A5" />
                     <span> Pool</span>
                   </div>
                   <div className="flex items-center space-x-2 text-xl border-2 p-3 rounded-lg">
@@ -255,8 +264,8 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
                 <button
                   className="mx-auto px-4 py-1 rounded-lg font-bold bg-teal-500 shadow-md
                     hover:scale-105 hover:shadow-lg transform transition-all duration-200 ease-in-out
-                    text-gray-50" 
-                    onClick={() => goToPayment()}
+                    text-gray-50"
+                  onClick={() => goToPayment()}
                 >
                   Reserve
                 </button>

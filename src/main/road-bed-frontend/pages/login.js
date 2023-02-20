@@ -25,7 +25,7 @@ function Login() {
     <div className="h-screen bg-gray-50">
       <Header />
       <div className="grid grid-cols-1 lg:grid-cols-2 w-[500px] sm:w-[1000px] h-[1000px] sm:h-[800px] mx-auto rounded-2xl bg-white shadow-lg
-        mt-24 px-2 sm:px-0">
+        mt-16 px-2 sm:px-0">
         <div className="mx-auto">
           <img
             className="h-full sm:rounded-l-2xl  object-cover object-bottom"

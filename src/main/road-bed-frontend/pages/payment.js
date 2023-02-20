@@ -24,10 +24,6 @@ function Payment() {
   const startDate = format(houseDetail.startDate, "dd/MM/yy");
   const endDate = format(houseDetail.endDate, "dd/MM/yy");
 
-  const difference =
-    houseDetail.endDate.getTime() - houseDetail.startDate.getTime();
-  const day = Math.ceil(difference / (1000 * 3600 * 24)) + 1;
-
   useEffect(() => {
     calculateSelectedDates();
   }, []);
@@ -86,7 +82,7 @@ function Payment() {
           </div>
           <div className="grid grid-cols-2 px-5 py-1 text-gray-600">
             <p>Days</p>
-            <p>{day}</p>
+            <p>{houseDetail.days}</p>
           </div>
           <div className="grid grid-cols-2 px-5 py-1 text-gray-600">
             <p>Days Between</p>
