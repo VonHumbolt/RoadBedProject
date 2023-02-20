@@ -7,6 +7,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import React, { useEffect, useRef, useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
 
 function Create({ cities, categories }) {
   const { data: session } = useSession();
@@ -61,10 +62,27 @@ function Create({ cities, categories }) {
     selectedImageFiles.forEach((imageFile) =>
       formData.append("multipartFile", imageFile)
     );
-    houseService.save(formData).then((res) => {
-      if(res.status === 200)
-        router.push("/detail/" + res.data.houseId);
-    });
+    toast.promise(
+      houseService.save(formData).then((res) => {
+        if(res.status === 200)
+          router.push("/detail/" + res.data.houseId);
+      }),
+      {
+        loading: 'Your house is saving...',
+        success: <b>House saved!</b>,
+        error: <b>Could not save.</b>,
+      },{
+        style: {
+          border: '1px solid #14b8a5',
+          padding: '16px',
+          color: '#14b8a5',
+        },
+        iconTheme: {
+          primary: '#14b8a5',
+          secondary: '#FFFAEE',
+        },
+      }
+    )
   };
 
   const selectImageUrl = (e) => {
@@ -111,6 +129,7 @@ function Create({ cities, categories }) {
   return (
     <div className="relative">
       <Header />
+      <Toaster position="top-center" />
       <div className="max-w-7xl mx-auto my-4">
         <div className="grid grid-cols-1 sm:grid-cols-2">
           <div>

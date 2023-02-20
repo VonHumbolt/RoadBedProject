@@ -17,6 +17,7 @@ import { useSession } from "next-auth/react";
 import { useRouter } from "next/router";
 import { useDispatch } from "react-redux";
 import { add, remove } from "@/redux/houseSlice";
+import { toast, Toaster } from "react-hot-toast";
 
 function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
   const { data: session } = useSession();
@@ -78,13 +79,43 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
   };
 
   const handleFavoriteHouseIcon = () => {
-    if (!isFavorite) {
-      userService.addHouseToFavorites(user?.userId, house).then((res) => {
-        if (res.status === 200) setIsFavorite(true);
-      });
+    if (session) {
+      if (!isFavorite) {
+        toast.promise(
+          userService.addHouseToFavorites(user?.userId, house).then((res) => {
+            if (res.status === 200) setIsFavorite(true);
+          }),
+          {
+            loading: "Saving...",
+            success: <b>Added to favourites!</b>,
+            error: <b>Could not added.</b>,
+          }
+        );
+      } else {
+        toast.promise(
+          userService
+            .removeHouseFromFavorites(user?.userId, house)
+            .then((res) => {
+              if (res.status === 200) setIsFavorite(false);
+            }),
+          {
+            loading: "Removing...",
+            success: <b>Removed from favourites!</b>,
+            error: <b>Could not removed.</b>,
+          }
+        );
+      }
     } else {
-      userService.removeHouseFromFavorites(user?.userId, house).then((res) => {
-        if (res.status === 200) setIsFavorite(false);
+      toast.error("Please login to add to favourites.", {
+        style: {
+          border: "1px solid #ed6172",
+          padding: "8px",
+          color: "#ed6172",
+        },
+        iconTheme: {
+          primary: "#ed6172",
+          secondary: "#FFFAEE",
+        },
       });
     }
   };
@@ -95,25 +126,39 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
   };
 
   const goToPayment = () => {
-    dispatch(remove());
+    if (session) {
+      dispatch(remove());
 
-    const days = calculateDaysBetweenDates()
-    const houseForReserve = {
-      houseId: house.houseId,
-      city: house.city,
-      startDate: startDate,
-      endDate: endDate,
-      days: days,
-      totalPrice: selectedDayCount * house.price + 100,
-    };
-    dispatch(add(houseForReserve));
-    router.push("/payment");
+      const days = calculateDaysBetweenDates();
+      const houseForReserve = {
+        houseId: house.houseId,
+        city: house.city,
+        startDate: startDate,
+        endDate: endDate,
+        days: days,
+        totalPrice: selectedDayCount * house.price + 100,
+      };
+      dispatch(add(houseForReserve));
+      router.push("/payment");
+    } else {
+      toast.error("Please login to reserve a house.", {
+        style: {
+          border: "1px solid #ed6172",
+          padding: "8px",
+          color: "#ed6172",
+        },
+        iconTheme: {
+          primary: "#ed6172",
+          secondary: "#FFFAEE",
+        }
+      });
+    }
   };
 
   return (
     <div className="pb-10">
       <Header />
-
+      <Toaster position="top-right" />
       <div className="max-w-7xl mx-auto">
         <div className="grid grid-cols-1 sm:grid-cols-2 px-6 py-12 w-full h-64">
           {/* Images */}
@@ -162,14 +207,14 @@ function HouseDetail({ house, firstImage, secondImage, thirdImage, tenant }) {
                 <Image
                   className="h-8 w-8 object-cover rounded-full"
                   src={
-                    tenant?.profilePicture ||
+                    tenant?.profilePicture?.imageUrl ||
                     "https://res.cloudinary.com/dspea8wm4/image/upload/v1676743195/default_profile_pic_aqsicv.jpg"
                   }
                   width={100}
                   height={100}
                 />
                 <p className="pl-2 text-gray-600 text-md ">Your Host: </p>
-
+                   
                 <p className="pl-2 text-gray-600 text-md font-semibold">
                   {house.owner.fullName}
                 </p>

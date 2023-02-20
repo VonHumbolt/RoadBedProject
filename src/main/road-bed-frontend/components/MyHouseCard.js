@@ -2,6 +2,7 @@ import HouseService from "@/services/houseService";
 import { useSession } from "next-auth/react";
 import Image from "next/image";
 import React from "react";
+import { toast, Toaster } from "react-hot-toast";
 
 function MyHouseCard({house}) {
   const {data: session} = useSession();
@@ -9,13 +10,29 @@ function MyHouseCard({house}) {
   const houseService = new HouseService(session);
 
   const deleteHouse = () => {
-    houseService.delete(house).then(res => {
-      console.log(res.data)
-    })
+    toast.promise(
+      houseService.delete(house),
+        {
+          loading: 'Your house is removing...',
+          success: <b>House removed!</b>,
+          error: <b>Could not remove.</b>,
+        },{
+          style: {
+            border: '1px solid #14b8a5',
+            padding: '16px',
+            color: '#14b8a5',
+          },
+          iconTheme: {
+            primary: '#14b8a5',
+            secondary: '#FFFAEE',
+          },
+        }
+    )
   }
 
   return (
     <div>
+      <Toaster position="top-center" />
       <div
         className="flex justify-between border border-1 border-gray-200 shadow-md rounded-lg my-2
           hover:scale-105 transition-all transform duration-200 ease-in-out cursor-pointer"
