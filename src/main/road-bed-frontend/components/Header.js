@@ -3,8 +3,6 @@ import { SearchIcon, MenuIcon } from "@heroicons/react/outline";
 import { UserCircleIcon } from "@heroicons/react/solid";
 import Link from "next/link";
 import HeaderMenu from "./HeaderMenu";
-import { userFromRedux } from "@/redux/userSlice";
-import { useSelector } from "react-redux";
 import "react-date-range/dist/styles.css";
 import "react-date-range/dist/theme/default.css";
 import { DateRange } from "react-date-range";
@@ -13,7 +11,6 @@ import { useSession } from "next-auth/react";
 import Image from "next/image";
 
 function Header({ searchQuery }) {
-  const user = useSelector(userFromRedux);
   const { data: session } = useSession();
 
   const router = useRouter();

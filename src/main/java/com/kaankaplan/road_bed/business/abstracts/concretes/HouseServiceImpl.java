@@ -16,6 +16,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -54,34 +56,12 @@ public class HouseServiceImpl implements HouseService {
 
     @Override
     public List<House> getHousesByCityAndEmptyDates(String cityName, Date startDate, Date endDate) {
-        List<House> houses = houseRepository.
-                findHousesByCity_CityName(
-                        cityName
+
+        return houseRepository.
+                findHousesByCity_CityNameAndReservedDatesIsNotContaining(
+                        cityName,
+                        List.of(startDate, endDate)
                 );
-
-
-        List<House> newHouses = new ArrayList<>();
-
-        houses.forEach(house -> {
-            boolean isIn = !Collections.disjoint(house.reservedDates, List.of(startDate, endDate));
-//            for (int i=0; i< house.reservedDates.size(); i++) {
-//                if (startDate.compareTo( house.reservedDates.get(i)) < 0 && endDate.compareTo(house.reservedDates.get(i)) < 0){
-//                    newHouses.add(house);
-//                    break;
-//                }
-//                else if (startDate.compareTo(house.reservedDates.get(i)) > 0 && endDate.compareTo(house.reservedDates.get(i)) > 0){
-//                    newHouses.add(house);
-//                    break;
-//                }
-//            }
-//            if (house.reservedDates.size() == 0) {
-//                newHouses.add(house);
-//            }
-            if (!isIn) {
-                newHouses.add(house);
-            }
-        });
-        return newHouses;
     }
 
     @CacheEvict(value = "houses", allEntries = true)
@@ -130,6 +110,7 @@ public class HouseServiceImpl implements HouseService {
         House house = houseRepository.findHouseByHouseId(reserveHouseRequest.houseId());
 
         house.reservedDates.addAll(reserveHouseRequest.datesForReserve());
+
         houseRepository.save(house);
     }
 }

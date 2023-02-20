@@ -58,7 +58,7 @@ public class HouseController {
 
     @GetMapping("getByCityNameAndEmptyDate/{cityName}")
     public List<House> getHousesByCityAndEmptyDates(@PathVariable String cityName,
-                                                    @RequestParam("start") @DateTimeFormat(pattern = "yyyy-MM-dd") Date startDate,
+                                                    @RequestParam("start") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) Date startDate,
                                                     @RequestParam("end") @DateTimeFormat(pattern = "yyyy-MM-dd") Date endDate) {
 
         return houseService.getHousesByCityAndEmptyDates(cityName, startDate, endDate);
