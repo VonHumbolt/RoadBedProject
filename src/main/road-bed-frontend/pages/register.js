@@ -2,11 +2,14 @@ import Header from "@/components/Header";
 import AuthService from "@/services/authService";
 import Image from "next/image";
 import Link from "next/link";
+import { useRouter } from "next/router";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { toast, Toaster } from "react-hot-toast";
 
 function Register() {
   const authService = new AuthService();
+  const router = useRouter();
 
   const {
     register,
@@ -14,13 +17,28 @@ function Register() {
     formState: { errors },
   } = useForm();
   const onSubmit = (data) => {
-    authService.register(data).then((result) => console.log(result.data));
+    authService.register(data).then((result) => {
+      if(result.status === 200){
+        toast.success("Your account is created. Please Login.", {
+          style: {
+            border: '1px solid #14b8a5',
+            padding: '16px',
+            color: '#14b8a5',
+          },
+          iconTheme: {
+            primary: '#14b8a5',
+            secondary: '#FFFAEE',
+          },
+        })
+        router.push("/login");
+      }
+    });
   };
 
   return (
     <div className="h-screen bg-gray-50">
       <Header />
-
+      <Toaster position="top-center" />
       <div className="flex justify-center mt-16">
         <div className="border-2 rounded-2xl shadow-lg bg-white">
           <div className="grid grid-cols-2 w-[1200px]">

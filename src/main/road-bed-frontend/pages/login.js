@@ -4,6 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 import { useForm } from "react-hook-form";
+import { Toaster } from "react-hot-toast";
 
 function Login() {
 
@@ -24,6 +25,7 @@ function Login() {
   return (
     <div className="h-screen bg-gray-50">
       <Header />
+      <Toaster position="top-center" />
       <div className="grid grid-cols-1 lg:grid-cols-2 w-[500px] sm:w-[1000px] h-[1000px] sm:h-[800px] mx-auto rounded-2xl bg-white shadow-lg
         mt-16 px-2 sm:px-0">
         <div className="mx-auto">
