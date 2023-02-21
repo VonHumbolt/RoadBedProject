@@ -50,6 +50,9 @@ function Payment() {
     const reserveDto = {
       houseId: houseDetail.houseId,
       datesForReserve: selectedDates,
+      tenantEmail: session.user.email,
+      day: houseDetail.days,
+      totalPrice: houseDetail.totalPrice + 100
     };
     setIsPay(true)
     setTimeout(() => {

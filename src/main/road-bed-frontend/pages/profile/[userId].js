@@ -3,10 +3,11 @@ import MyFavoritesComponent from "@/components/MyFavoritesComponent";
 import MyHouseComponent from "@/components/MyHouseComponent";
 import Image from "next/image";
 import React, { useRef, useState } from "react";
-import { ArrowNarrowUpIcon, BookmarkIcon, CheckCircleIcon, ClipboardCheckIcon, HeartIcon, StarIcon } from "@heroicons/react/solid";
+import { CheckCircleIcon, ClipboardCheckIcon, HeartIcon } from "@heroicons/react/solid";
 import TenantService from "@/services/tenantService";
 import { useSession } from "next-auth/react";
 import { HomeIcon } from "@heroicons/react/solid";
+import MyVisitedHouseComponent from "@/components/MyVisitedHouseComponent";
 
 function Profile({ user, tenant }) {
   const { data: session } = useSession();
@@ -51,7 +52,8 @@ function Profile({ user, tenant }) {
       <div className="max-w-7xl mx-auto mt-8">
         <div className="flex">
           {/* Profile Pic */}
-          <div className="relative w-32 h-32 mx-4">
+       
+          <div className="relative w-32 px-12 hidden sm:inline-block">
             <Image
               className="rounded-full object-cover cursor-pointer"
               src={
@@ -179,8 +181,8 @@ function Profile({ user, tenant }) {
 
               <div className="py-2 pr-16">
                 <p className="text-xl pt-1 pb-4 font-semibold">Contact</p>
-                <p className="text-lg text-gray-600">{user.email}</p>
-                <p className="text-lg text-gray-600">0 542 434 32 34</p>
+                <p className="text-lg text-gray-600 font-medium">{user.email}</p>
+                <p className="text-lg text-gray-600 font-medium">0 542 434 32 34</p>
               </div>
             </div>
           </div>
@@ -195,7 +197,7 @@ function Profile({ user, tenant }) {
             <MyFavoritesComponent houses={user.favoriteHouses} />
           ) : null}
           {activeTab === "visited" ? (
-            <MyFavoritesComponent houses={user.favoriteHouses} /> // CHANGE
+            <MyVisitedHouseComponent visits={tenant.visitedHouses} />
           ) : null}
         </div>
       </div>

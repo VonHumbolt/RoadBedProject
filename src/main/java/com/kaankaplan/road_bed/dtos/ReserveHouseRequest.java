@@ -5,6 +5,9 @@ import java.util.List;
 
 public record ReserveHouseRequest(
         String houseId,
-        List<Date> datesForReserve
+        List<Date> datesForReserve,
+        String tenantEmail,
+        int day,
+        double totalPrice
 ) {
 }

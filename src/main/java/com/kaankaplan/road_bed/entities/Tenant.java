@@ -10,7 +10,7 @@ public class Tenant extends User{
 
     public Image profilePicture;
 
-    public List<House> visitedHouses = new ArrayList<>();
+    public List<Visit> visitedHouses = new ArrayList<>();
 
     public List<House> ownHouses = new ArrayList<>();
     public Tenant() { }

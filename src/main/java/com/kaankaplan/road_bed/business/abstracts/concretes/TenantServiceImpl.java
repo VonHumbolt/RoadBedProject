@@ -5,6 +5,7 @@ import com.kaankaplan.road_bed.business.abstracts.TenantService;
 import com.kaankaplan.road_bed.business.abstracts.UserService;
 import com.kaankaplan.road_bed.config.cloudinary.ImageUploadService;
 import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
+import com.kaankaplan.road_bed.dtos.ReserveHouseRequest;
 import com.kaankaplan.road_bed.dtos.TenantRegisterRequest;
 import com.kaankaplan.road_bed.entities.*;
 import com.kaankaplan.road_bed.repositories.TenantRepository;
@@ -14,6 +15,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.time.LocalDate;
+import java.util.Date;
+import java.util.List;
 import java.util.Map;
 
 @Service
@@ -63,6 +67,7 @@ public class TenantServiceImpl implements TenantService {
         return tenantRepository.insert(tenant);
     }
 
+    @Transactional
     @Override
     public void addHouseToTenantsOwnHouse(House house, String email) {
         Tenant tenant = tenantRepository.findTenantByEmail(email);
@@ -72,6 +77,7 @@ public class TenantServiceImpl implements TenantService {
         tenantRepository.save(tenant);
     }
 
+    @Transactional
     @Override
     public void removeHouseFromTenantsOwnHouse(House house, String email) {
         Tenant tenant = tenantRepository.findTenantByEmail(email);
@@ -81,6 +87,7 @@ public class TenantServiceImpl implements TenantService {
         tenantRepository.save(tenant);
     }
 
+    @Transactional
     @Override
     public Tenant updateProfilePicture(String userId, MultipartFile multipartFile) {
 
@@ -97,6 +104,25 @@ public class TenantServiceImpl implements TenantService {
 
         return tenantRepository.save(tenant);
                 
+    }
+
+
+    @Transactional
+    @Override
+    public void addHouseToTenantsVisitedHouses(House house, ReserveHouseRequest reserveHouseRequest) {
+        Tenant tenant = tenantRepository.findTenantByEmail(reserveHouseRequest.tenantEmail());
+        if (tenant == null)
+            throw new RuntimeException("Tenant is not found");
+
+        Visit visit = new Visit(
+                house,
+                reserveHouseRequest.datesForReserve(),
+                reserveHouseRequest.day(),
+                reserveHouseRequest.totalPrice()
+            );
+        tenant.visitedHouses.add(visit);
+
+        tenantRepository.save(tenant);
     }
 }
 
