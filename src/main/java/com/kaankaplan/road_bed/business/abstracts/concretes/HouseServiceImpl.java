@@ -8,18 +8,16 @@ import com.kaankaplan.road_bed.config.concerns.loging.ToLog;
 import com.kaankaplan.road_bed.dtos.ReserveHouseRequest;
 import com.kaankaplan.road_bed.entities.House;
 import com.kaankaplan.road_bed.entities.Image;
-import com.kaankaplan.road_bed.entities.Tenant;
 import com.kaankaplan.road_bed.repositories.HouseRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.CacheEvict;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.text.SimpleDateFormat;
-import java.time.LocalDate;
 import java.util.*;
 
 @Service
@@ -38,7 +36,8 @@ public class HouseServiceImpl implements HouseService {
     @Cacheable(value = "houses")
     @Override
     public List<House> getAll() {
-        return houseRepository.findAll(PageRequest.of(0, 10)).getContent();
+        Pageable pageable = PageRequest.of(0, 10);
+        return houseRepository.findAll(pageable).getContent();
     }
 
     @Override

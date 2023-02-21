@@ -16,6 +16,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
@@ -69,15 +70,25 @@ class UserServiceImplTest {
     }
 
     @Test
-    void canLoadUserByUsername() {
-        String email = "kaankaplan@gmail.com";
-        User user = new User(email, "Kaan Kaplan", "1234", new Role("TENANT"));
+    void canFindUserById() {
+        String userId = "userId";
+        given(userRepository.findById(userId)).willReturn(Optional.of(new User()));
 
-        given(userRepository.findUserByEmail(email)).willReturn(Optional.of(user));
+        userServiceImpl.findUserById(userId);
 
-        userServiceImpl.loadUserByUsername(email);
+        verify(userRepository).findById(userId);
+    }
 
-        verify(userRepository).findUserByEmail(email);
+    @Test
+    void canNotFindUserByIdWhenUserIsNotExist() {
+        String userId = "userId";
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userServiceImpl.findUserById(userId))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("User is not found");
+
+        verify(userRepository).findById(userId);
     }
 
     @Test
@@ -93,6 +104,20 @@ class UserServiceImplTest {
     }
 
     @Test
+    void shouldNotAddHouseToFavoriteWhenUserIsNotExist() {
+        String userId = "userId";
+
+        given(userRepository.findById(userId)).willReturn(Optional.empty());
+
+        assertThatThrownBy(() -> userServiceImpl.addHouseToFavorites(userId, new House()))
+                .isInstanceOf(RuntimeException.class)
+                .hasMessageContaining("User not found");
+
+        verify(userRepository, never()).save(any());
+    }
+
+
+    @Test
     void shouldNotRemoveHouseFromFavoritesWhenHouseIsNotExistsInFavorites() {
         String userId = "userId";
         User user = new User("kaankaplan@gmail.com", "Kaan Kaplan", "1234", new Role("TENANT"));
@@ -105,6 +130,18 @@ class UserServiceImplTest {
                         .hasMessageContaining("House is not find in favorites");
 
         verify(userRepository, never()).save(any());
+    }
+
+    @Test
+    void canLoadUserByUsername() {
+        String email = "kaankaplan@gmail.com";
+        User user = new User(email, "Kaan Kaplan", "1234", new Role("TENANT"));
+
+        given(userRepository.findUserByEmail(email)).willReturn(Optional.of(user));
+
+        userServiceImpl.loadUserByUsername(email);
+
+        verify(userRepository).findUserByEmail(email);
     }
 
     @Test
