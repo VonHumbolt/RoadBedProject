@@ -1,5 +1,5 @@
 # Road Bed Full Stack Project
-RoadBed project is a full stack web application project and it was created with Java Spring Boot and Next.js.
+Road Bed project is a full stack web application project and it was created with Java Spring Boot and Next.js.
 Also, frontend design of project was designed with Tailwind CSS.
 
 ## Brief Description of the Project
@@ -56,7 +56,7 @@ If the access token is expired, I use the refresh token stored in Redis to refre
 As a second goal, Houses, categories and cities are cached using Redis. Redis configuration is in 
 config package.Also, AOP was used. For logging process, Logging aspect was created and saving, deleting methods were logged. 
 To upload images on the cloud, Cloudinary Api was used. Cloudinary configuration and ImageServices are in config package.
-Unit tests of the business layer is written using Mockito. 
+Unit tests of the business layer is written using Mockito. Unit tests are inside the src/test package.
 Docker was used to execute Redis and MongoDB images. For this purpose, docker compose file was generated.
 
 <h4>On the Frontend Side, </h4>
@@ -70,3 +70,53 @@ is automatically sent to refresh access token.
 React Date Range was used to select date range for searching and reserving house. For form generating and validation,
 React Hook Form was preferred. React Hot Toast was used to notifications.
 Tailwind CSS was used for UI and Responsive design of the project.
+
+## How can I use this project? 
+<p> 1. Clone or Download zip folder of this repository </p> 
+    
+    git clone https://github.com/VonHumbolt/RoadBedProject.git
+
+<p> 2. Create <i> .env </i> file in root folder and paste your cloudinary configuration url. 
+    .env file should look like this:
+</p>
+
+    CLOUDINARY_URL=cloudinary://api-access....
+
+<p> 3. Run docker compose file for redis and mongo images.
+    Open cmd in project root folder and type:
+</p>
+
+    docker compose up -d
+
+<p> 4. Start your backend project with your favourite IDE. </p>
+
+<p> 5. In src/main/road-bed-frontend directory, open cmd and type: </p>
+
+    npm install
+
+<p> 6. Start frontend project. </p>
+
+    npm run dev
+
+## UI of Project
+<h4>Main page</h4>
+<img src="app_images/main_page.jpg" />
+<img src="app_images/main_page2.jpg" />
+
+<h4>Searched Houses</h4>
+<img  src="app_images/search.jpg" />
+
+<h4>Filter Houses in the Same Category</h4>
+<img src="app_images/small_flats.jpg" />
+
+<h4>House Detail Page</h4>
+<img src="app_images/detail.jpg" />
+
+<h4>Payment Page</h4>
+<img src="app_images/payment.jpg" />
+
+<h4>Profile Page</h4>
+<img src="app_images/profile.jpg" />
+
+<h4>Login Page</h4>
+<img src="app_images/login.jpg" />

@@ -8,9 +8,9 @@ function Search({city, formattedStartDate, formattedEndDate, houses}) {
 
   return (
     <div>
-        <Header searchQuery={`${city} · ${formattedStartDate} -  ${formattedEndDate}`}/>
+        <Header searchQuery={`${city} · ${formattedStartDate} - ${formattedEndDate}`}/>
 
-        <div className='max-w-7xl h-screen mx-auto px-8'>
+        <div className='max-w-7xl mx-auto px-8'>
 
             <h4 className='text-gray-500 text-md mt-10'> {formattedStartDate} - {formattedEndDate} · {houses.length > 10 ? "10+" : houses.length} Houses</h4>
             <h2 className='text-xl font-semibold mt-4'>Houses in {city}</h2>

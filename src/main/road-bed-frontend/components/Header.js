@@ -48,7 +48,7 @@ function Header({ searchQuery }) {
 
   return (
     <header className="shadow-lg p-5 sticky top-0 bg-white z-20">
-      <div className="max-w-7xl mx-auto flex flex-row justify-between items-center">
+      <div className="max-w-7xl mx-auto grid grid-cols-3 justify-between items-center">
         <Link href="/">
           <div className="flex items-center space-x-2 cursor-pointer">
             <Image
@@ -76,7 +76,7 @@ function Header({ searchQuery }) {
           />
         </div>
 
-        <div className="flex items-center space-x-4">
+        <div className="flex justify-end items-center space-x-4">
           {!session && (
             <Link href="/register">
               <p className="text-gray-500 cursor-pointer hidden sm:inline-block">
